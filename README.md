@@ -4,6 +4,17 @@
 
 * Ubuntu 20.04
 * ROS Noetic
+* Gazebo 11 and other dependencies (30min+, consider grabbing a kopi)
+
+```
+sudo apt-get update && sudo apt upgrade
+sudo apt-get install python-wstool python-catkin-tools \
+                     protobuf-compiler libgoogle-glog-dev \
+                     ros-$ROS_DISTRO-control-toolbox \
+                     ros-$ROS_DISTRO-octomap-msgs \
+                     ros-$ROS_DISTRO-octomap-ros
+sudo apt-get install ros-noetic-gazebo*
+```
 
 # Installations
 
