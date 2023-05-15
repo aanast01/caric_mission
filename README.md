@@ -1,4 +1,4 @@
-# Simulating for Cooperative Aerial Inspection Challenge
+# CARIC@OneStop: 5-minute kickstart for Cooperative Aerial Inspection Challenge
 
 # Prerequisites
 
