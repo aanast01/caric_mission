@@ -11,9 +11,8 @@ Building a workspace for the challenge's packages in home directory
 
 ```
 cd
-
 mkdir -p ws_caric/src;
-
+catkin_init_workspace;
 cd ws_caric/src;
 
 git clone https://github.com/brytsknguyen/caric_mission
