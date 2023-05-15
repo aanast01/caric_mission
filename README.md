@@ -17,7 +17,7 @@ mkdir -p ws_caric/src;
 cd ws_caric/src;
 
 git clone https://github.com/brytsknguyen/caric_mission
-git clone https://github.com/brytsknguyen/rotors_simulation
+git clone https://github.com/brytsknguyen/rotors_simulator
 git clone https://github.com/caomuqing/tcc
 git clone https://github.com/caomuqing/traj_gennav
 
