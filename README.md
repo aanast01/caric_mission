@@ -30,11 +30,14 @@ source ~/ws_caric/devel/setup.bash
 # Run the Marina Bay Sands Mission
 
 ```
-roslaunch caric_mission run_mbs.launch \
-& \
+
 (
-sleep 3;
-roscd caric/scripts/
+roscd caric_mission/scripts/
+sleep 10;
+wait;
+echo LAUNCHING
 bash launch_all.sh
-)
+) & \
+roslaunch caric_mission run_mbs.launch
+
 ```
