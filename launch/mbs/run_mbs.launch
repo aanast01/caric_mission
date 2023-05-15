@@ -1,0 +1,141 @@
+<launch>
+    <arg name="odom_topic"            default="ground_truth/odometry" />
+
+    <arg name="enable_thrust_control" default="false" />
+    <arg name="sim_type"              default="rotors" />
+ 
+    <arg name="world_name"            default="$(find caric_mission)/worlds/mbs.world" />
+
+    <arg name="enable_logging"        default="false" />
+    <arg name="enable_ground_truth"   default="true" />
+    <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
+    <arg name="debug"                 default="false" />
+    <arg name="gui"                   default="true" />
+    <arg name="paused"                default="false" />
+    <arg name="frame_id"              default="odom" />
+    <!-- The following line causes gzmsg and gzerr messages to be printed to the console
+    (even when Gazebo is started through roslaunch) -->
+    <arg name="verbose"               default="false" />
+
+    <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
+    <env name="GAZEBO_RESOURCE_PATH"  value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name"        value="$(arg world_name)" />
+        <arg name="debug"             value="$(arg debug)" />
+        <arg name="paused"            value="$(arg paused)" />
+        <arg name="gui"               value="$(arg gui)" />
+        <arg name="verbose"           value="$(arg verbose)" />
+    </include>
+
+
+    <!-- Visualize MBS in RVIZ -->
+    <param name="/model_path" type="string" value="$(find caric_mission)/models/mbs"/>
+    <arg name="node_start_delay" default="1.0" /> <!-- Delay of 5 seconds to let RViz come up -->
+    <node name="mesh_visualizer" pkg="caric_mission" type="mesh_visualizer.py"
+          output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@'">
+    </node>  
+
+
+    <!-- Spawning the ground station -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_gcs.launch">
+
+        <arg name="namespace"         value="gcs" />
+        <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
+        
+        <arg name="ppcom_id"          value="gcs" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+
+        <arg name="x"                 value="-2.0" />
+        <arg name="y"                 value="08.0" />
+        <arg name="z"                 value="10.0" />
+
+    </include>
+
+
+    <!-- Spawning one drone -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+
+        <arg name="mav_name"          value="firefly" />
+        <arg name="namespace"         value="firefly1" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+
+        <arg name="ppcom_id"          value="firefly1" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="start_x"           value="0.0" />
+        <arg name="start_y"           value="8.0" />
+
+        <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_1.yaml" />
+
+    </include>
+
+
+    <!-- Spawning another drone -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+
+        <arg name="mav_name"          value="firefly" />
+        <arg name="namespace"         value="firefly2" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+
+        <arg name="ppcom_id"          value="firefly2" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="start_x"           value="31.0" />
+        <arg name="start_y"           value="00.0" />
+
+        <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_2.yaml" />
+
+    </include>
+
+
+    <!-- Spawning another drone -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+
+        <arg name="mav_name"          value="firefly" />
+        <arg name="namespace"         value="firefly3" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+
+        <arg name="ppcom_id"          value="firefly3" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="start_x"           value="58.0" />
+        <arg name="start_y"           value="-13.0" />
+
+        <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_3.yaml" />
+
+    </include>
+
+
+    <!-- Spawning another drone -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+
+        <arg name="mav_name"          value="firefly" />
+        <arg name="namespace"         value="firefly4" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+
+        <arg name="ppcom_id"          value="firefly4" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="start_x"           value="0.0" />
+        <arg name="start_y"           value="4.0" />
+
+        <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_4.yaml" />
+
+    </include>
+
+
+    <!-- Spawning another drone -->
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+
+        <arg name="mav_name"          value="firefly" />
+        <arg name="namespace"         value="firefly5" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+
+        <arg name="ppcom_id"          value="firefly5" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="start_x"           value="-2.0" />
+        <arg name="start_y"           value="25.0" />
+
+        <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_5.yaml" />
+
+    </include>
+
+    <node pkg="rviz" type="rviz" name="rviz_caric" args="-d $(find caric_mission)/rviz/caric_mbs.rviz" />
+
+</launch>
