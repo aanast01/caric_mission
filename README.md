@@ -1,4 +1,4 @@
-# Simulating for Cooperative Multi-UAV Inspection Challenge
+# Simulating for Cooperative Aerial Inspection Challenge
 
 # Prerequisites
 
