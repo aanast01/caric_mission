@@ -5,6 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /GndCtrStation1
+        - /GndCtrStation1/Odom1
+        - /GndCtrStation1/Odom1/Shape1
         - /GndCtrStation1/LOS_NBR1/Namespaces1
         - /firefly11
         - /firefly11/Odom1/Covariance1
@@ -90,8 +92,8 @@ Visualization Manager:
           Queue Size: 1
           Shape:
             Alpha: 1
-            Axes Length: 1
-            Axes Radius: 0.20000000298023224
+            Axes Length: 5
+            Axes Radius: 0.5
             Color: 255; 25; 0
             Head Length: 0.30000001192092896
             Head Radius: 0.10000000149011612
@@ -414,7 +416,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 107.29828643798828
+      Distance: 94.16706848144531
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -422,9 +424,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 38.5540657043457
-        Y: 2.4200289249420166
-        Z: 30.090002059936523
+        X: 17.281949996948242
+        Y: -1.365064263343811
+        Z: 13.575237274169922
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

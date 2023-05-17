@@ -94,9 +94,6 @@ void ContactCallback(ConstContactsPtr &_msg)
         return;
 
     topoMtx.lock();
-    // vector<string> nodeName = nodeName;
-    // vector<string> nodeRole = nodeRole;
-    // vector<vector<double>> linkMat = linkMat;
 
     vector<bool> deadNode(Nnodes, false);
     for (int i = 0; i < _msg->contact_size(); ++i)
@@ -116,11 +113,11 @@ void ContactCallback(ConstContactsPtr &_msg)
                                 && col1.find("ground_plane") == std::string::npos;
             bool on_air = nodeStatus[node_idx] == "on_air";
 
-            if (col1.find("gcs") != std::string::npos || col2.find("gcs") != std::string::npos)
-                continue;
+            // if (col1.find("gcs") != std::string::npos || col2.find("gcs") != std::string::npos)
+            //     continue;
 
-            printf("Collision %s <-> %s. case1 %d. case2: %d. status: %s. %d\n",
-                    col1.c_str(), col2.c_str(), colide_case1, colide_case2, nodeStatus[node_idx].c_str(), on_air);
+            // printf("Collision %s <-> %s. case1 %d. case2: %d. status: %s. %d\n",
+            //         col1.c_str(), col2.c_str(), colide_case1, colide_case2, nodeStatus[node_idx].c_str(), on_air);
 
             if((colide_case1 || colide_case2) && on_air)
             {
@@ -131,10 +128,10 @@ void ContactCallback(ConstContactsPtr &_msg)
                 
                 for(int k = 0; k < 1; k++)
                 {
-                    auto force = _msg->contact(i).wrench(k).body_1_wrench().force();
-                    printf("wr %d: %6.3f. %6.3f. %6.3f. %s\n", k, force.x(), force.y(), force.z(), _msg->contact(i).world().c_str());
-                    force = _msg->contact(i).wrench(k).body_2_wrench().force();
-                    printf("wr %d: %6.3f. %6.3f. %6.3f. %s\n", k, force.x(), force.y(), force.z(), _msg->contact(i).world().c_str());
+                    // auto force = _msg->contact(i).wrench(k).body_1_wrench().force();
+                    // printf("wr %d: %6.3f. %6.3f. %6.3f. %s\n", k, force.x(), force.y(), force.z(), _msg->contact(i).world().c_str());
+                    // force = _msg->contact(i).wrench(k).body_2_wrench().force();
+                    // printf("wr %d: %6.3f. %6.3f. %6.3f. %s\n", k, force.x(), force.y(), force.z(), _msg->contact(i).world().c_str());
                     
                     // Command the drones to fall
                     tcc::Stop stop;
@@ -175,6 +172,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     nodeOdom = msg->node_odom;
     assert(nodeOdom.size() == Nnodes);
 
+    // Update the distance
     int range_idx = 0;
     for(int i = 0; i < Nnodes; i++)
     {
@@ -204,8 +202,14 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     vizAid.marker.colors.clear();
     for(int i = 0; i < Nnodes; i++)
     {
+        if (nodeOdom[i].pose.covariance[0] < 0.0)
+            continue;
+
         for(int j = i+1; j < Nnodes; j++)
-        {   
+        {
+            if (nodeOdom[j].pose.covariance[0] < 0.0)
+                continue;
+            
             // If either node is dead:
             if( !nodeAlive[i] || !nodeAlive[j] )
             {
