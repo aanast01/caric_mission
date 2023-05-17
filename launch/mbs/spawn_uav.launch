@@ -10,6 +10,7 @@
     
     <arg name="ppcom_id"              default="firefly" />
     <arg name="ppcom_config"          default="$(find rotors_description)/ppcom_network/caric_network.txt" />
+    <arg name="ppcom_hz"              default="10" />
 
     <arg name="world_name"            default="$(find rotors_gazebo)/worlds/city12_tiltedbuildings.world" />
     <arg name="enable_logging"        default="false" />
@@ -58,7 +59,6 @@
             <arg name="ppcom_id"            value="$(arg ppcom_id)" />
             <arg name="ppcom_config"        value="$(arg ppcom_config)" />
             
-
         </include>
 
 
