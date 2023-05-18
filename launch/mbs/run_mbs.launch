@@ -18,8 +18,9 @@
     <arg name="verbose"               default="false" />
 
     <!-- Frequency to check the line of sight raytracing -->
-    <arg name="ppcom_hz"              default="10"/>
+    <arg name="ppcom_hz"              default="20"/>
 
+    <!-- Launch the Gazebo World -->
     <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
     <env name="GAZEBO_RESOURCE_PATH"  value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -63,7 +64,7 @@
 
 
     <!-- Spawning one drone -->
-    <!-- <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly1" />
@@ -78,7 +79,7 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_1.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
@@ -101,7 +102,7 @@
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly3" />
@@ -116,11 +117,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_3.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly4" />
@@ -135,11 +136,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_4.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly5" />
@@ -154,7 +155,7 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_5.yaml" />
 
-    </include> -->
+    </include>
 
     <node pkg="rviz" type="rviz" name="rviz_caric" args="-d $(find caric_mission)/rviz/caric_mbs.rviz" />
 

@@ -28,7 +28,7 @@ cd ws_caric/src;
 
 git clone https://github.com/brytsknguyen/caric_mission
 git clone https://github.com/brytsknguyen/rotors_simulator
-git clone https://github.com/caomuqing/tcc
+git clone https://github.com/brytsknguyen/tcc
 git clone https://github.com/caomuqing/traj_gennav
 
 catkin build;
@@ -40,7 +40,6 @@ source ~/ws_caric/devel/setup.bash
 # Run the Marina Bay Sands Mission
 
 ```
-
 (
 roscd caric_mission/scripts/
 sleep 10;

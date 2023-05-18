@@ -4,21 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /GndCtrStation1
-        - /GndCtrStation1/Odom1
-        - /GndCtrStation1/Odom1/Shape1
-        - /GndCtrStation1/LOS_NBR1/Namespaces1
-        - /firefly11
-        - /firefly11/Odom1/Covariance1
-        - /firefly21
-        - /firefly21/Odom1/Shape1
-        - /firefly31
-        - /firefly31/Odom1/Shape1
-        - /firefly41
-        - /firefly41/Odom1/Shape1
-        - /firefly51
-        - /LOSCheck1
         - /LOSCheck1/Namespaces1
+        - /OccupancyGrid1
       Splitter Ratio: 0.5614035129547119
     Tree Height: 480
   - Class: rviz/Selection
@@ -66,288 +53,6 @@ Visualization Manager:
       Plane Cell Count: 100
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 5
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /gcs/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /gcs/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: GndCtrStation
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 4
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /firefly1/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /firefly1/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: firefly1
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 4
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /firefly2/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /firefly2/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: firefly2
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 4
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /firefly3/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /firefly3/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: firefly3
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 4
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /firefly4/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /firefly4/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: firefly4
-    - Class: rviz/Group
-      Displays:
-        - Angle Tolerance: 0
-          Class: rviz/Odometry
-          Covariance:
-            Orientation:
-              Alpha: 0.5
-              Color: 255; 255; 127
-              Color Style: Unique
-              Frame: Local
-              Offset: 1
-              Scale: 1
-              Value: true
-            Position:
-              Alpha: 0.30000001192092896
-              Color: 204; 51; 204
-              Scale: 1
-              Value: true
-            Value: true
-          Enabled: true
-          Keep: 1
-          Name: Odom
-          Position Tolerance: 0
-          Queue Size: 1
-          Shape:
-            Alpha: 1
-            Axes Length: 4
-            Axes Radius: 0.5
-            Color: 255; 25; 0
-            Head Length: 0.30000001192092896
-            Head Radius: 0.10000000149011612
-            Shaft Length: 1
-            Shaft Radius: 0.05000000074505806
-            Value: Axes
-          Topic: /firefly5/ground_truth/odometry
-          Unreliable: false
-          Value: true
-        - Class: rviz/Marker
-          Enabled: false
-          Marker Topic: /firefly5/los_marker
-          Name: LOS_NBR
-          Namespaces:
-            {}
-          Queue Size: 1
-          Value: false
-      Enabled: true
-      Name: firefly5
     - Alpha: 1
       Buffer Length: 10
       Class: rviz/Path
@@ -388,6 +93,232 @@ Visualization Manager:
         loop_marker: true
       Queue Size: 1
       Value: true
+    - Class: rviz/Group
+      Displays:
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: GCSOdom
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 5
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /gcs/ground_truth/odometry
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Firefly1
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 4
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly1/ground_truth/odometry
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Firefly2
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 4
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly2/ground_truth/odometry
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Firefly3
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 4
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly3/ground_truth/odometry
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Firefly4
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 4
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly4/ground_truth/odometry
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Firefly5
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 4
+            Axes Radius: 0.5
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly5/ground_truth/odometry
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: Odom
+    - Class: octomap_rviz_plugin/OccupancyGrid
+      Enabled: true
+      Max. Height Display: inf
+      Max. Octree Depth: 16
+      Min. Height Display: -inf
+      Name: OccupancyGrid
+      Octomap Topic: /world/octomap
+      Queue Size: 5
+      Value: true
+      Voxel Alpha: 1
+      Voxel Coloring: Z-Axis
+      Voxel Rendering: Occupied Voxels
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -416,7 +347,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 94.16706848144531
+      Distance: 146.0399932861328
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -424,17 +355,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 17.281949996948242
-        Y: -1.365064263343811
-        Z: 13.575237274169922
+        X: 37.389488220214844
+        Y: 5.137424945831299
+        Z: 27.375286102294922
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.25479790568351746
+      Pitch: 0.15979793667793274
       Target Frame: <Fixed Frame>
-      Yaw: 4.688061714172363
+      Yaw: 4.363057613372803
     Saved: ~
 Window Geometry:
   Displays:
