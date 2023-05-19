@@ -4,8 +4,11 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Grid1
         - /LOSCheck1/Namespaces1
         - /OccupancyGrid1
+        - /PointCloud21
+        - /PointCloud21/Autocompute Value Bounds1
       Splitter Ratio: 0.5614035129547119
     Tree Height: 480
   - Class: rviz/Selection
@@ -82,7 +85,7 @@ Visualization Manager:
       Marker Topic: /visualization_marker
       Name: STLModel
       Namespaces:
-        "": true
+        {}
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
@@ -90,7 +93,7 @@ Visualization Manager:
       Marker Topic: /topology_marker
       Name: LOSCheck
       Namespaces:
-        loop_marker: true
+        {}
       Queue Size: 1
       Value: true
     - Class: rviz/Group
@@ -309,9 +312,9 @@ Visualization Manager:
       Name: Odom
     - Class: octomap_rviz_plugin/OccupancyGrid
       Enabled: true
-      Max. Height Display: inf
+      Max. Height Display: 3.4028234663852886e+38
       Max. Octree Depth: 16
-      Min. Height Display: -inf
+      Min. Height Display: -3.4028234663852886e+38
       Name: OccupancyGrid
       Octomap Topic: /world/octomap
       Queue Size: 5
@@ -319,6 +322,34 @@ Visualization Manager:
       Voxel Alpha: 1
       Voxel Coloring: Z-Axis
       Voxel Rendering: Occupied Voxels
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 24.91791343688965
+        Min Value: 1.7881393432617188e-07
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: AxisColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.30000001192092896
+      Style: Flat Squares
+      Topic: /local_map
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -347,7 +378,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 146.0399932861328
+      Distance: 133.1444549560547
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -355,17 +386,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 37.389488220214844
-        Y: 5.137424945831299
-        Z: 27.375286102294922
+        X: 23.993038177490234
+        Y: 8.25837230682373
+        Z: 17.120698928833008
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.15979793667793274
+      Pitch: 0.2547970414161682
       Target Frame: <Fixed Frame>
-      Yaw: 4.363057613372803
+      Yaw: 4.608047008514404
     Saved: ~
 Window Geometry:
   Displays:

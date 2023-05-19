@@ -27,6 +27,8 @@
     <arg name="start_x"               default="0.0" />
     <arg name="start_y"               default="0.0" />
 
+    <arg name="delay_time"            default="10.0" />
+
     <!-- Path file -->
     <arg name="path_file"             default="$(find traj_gennav)/paths/path.yaml" />
 
@@ -62,7 +64,8 @@
         </include>
 
 
-        <node respawn="false" pkg="traj_gennav" type="traj_gennav_node" name="traj_gennav" output="screen">
+        <node respawn="false" pkg="traj_gennav" type="traj_gennav_node" name="traj_gennav" output="screen" 
+              launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
             
             <param name="frame_id"          type="string" value="world" />
             <param name="desired_distance"  type="double" value="2.0" />
@@ -78,7 +81,8 @@
         </node>
 
 
-        <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen">
+        <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen"
+              launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
             
             <param name="frame_id"              type="string"  value="world" />
             <param name="sim_type"              type="string"  value="$(arg sim_type)" />
@@ -99,7 +103,8 @@
 
 
         <node name="PID_attitude_controller" pkg="mav_lowlevel_attitude_controller"
-              type="mav_pid_attitude_controller_node" respawn="true" clear_params="true" output="screen">
+              type="mav_pid_attitude_controller_node" respawn="true" clear_params="true" output="screen"
+              launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
             
             <rosparam file="$(find mav_lowlevel_attitude_controller)/resources/PID_attitude_$(arg mav_name).yaml" />
             <remap from="odometry" to="/$(arg namespace)/$(arg odom_topic)" />

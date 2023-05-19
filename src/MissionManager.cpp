@@ -37,7 +37,13 @@
 #include "visualization_msgs/Marker.h"
 #include "std_msgs/ColorRGBA.h"
 
+#include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/filters/crop_box.h>
+#include <pcl/filters/conditional_removal.h>
+
 #include "tcc/Stop.h"
+#include "utility.h"
 
 // Printout colors
 #define KNRM "\x1B[0m"
@@ -85,6 +91,10 @@ VizAid vizAid;
 RosVizColor los_color;
 RosVizColor nlos_color;
 RosVizColor dead_color;
+
+// Map 
+CloudXYZPtr globalMap(new CloudXYZ());
+static pcl::KdTreeFLANN<PointXYZ> kdTreeglobalMap;
 
 /////////////////////////////////////////////////
 // Function is called everytime a message is received.
@@ -184,6 +194,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         }
     }
 
+    // Update the status
     for(int i = 0; i < Nnodes; i++)
     {
         Vector3d vel(nodeOdom[i].twist.twist.linear.x,
@@ -196,6 +207,8 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         if (nodeOdom[i].pose.pose.position.z < 0.1 && vel.norm() < 0.1)
             nodeStatus[i] = "on_ground";
     }
+
+    topoMtx.unlock();
 
     // Update the link visualization
     vizAid.marker.points.clear();
@@ -242,8 +255,94 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     }
 
     vizAid.rosPub.publish(vizAid.marker);
+}
 
-    topoMtx.unlock();
+// Callback function for poses
+void odomTimerCallback(const ros::TimerEvent& event)
+{
+
+}
+
+// Callback function for pointcloud
+void cloudTimerCallback(const ros::TimerEvent& event)
+{
+    // if (Nnodes == 0)
+    //     return;
+    
+    // // Duplicate the tree of global map 
+    // static vector<pcl::KdTreeFLANN<PointXYZ>> kdTreeglobalMapDup(Nnodes, kdTreeglobalMap);
+    // static bool firstshot = true;
+    // // if (firstshot)
+    // // {
+    // //     firstshot = false;
+    // // }
+
+    // // Get the node poses
+    // topoMtx.lock();
+    // vector<rosOdom> nodeOdom_ = nodeOdom;
+    // topoMtx.unlock();
+
+    // // Find the pointcloud seen within a radius by each node
+    // for(int i = 1; i < 2; i++)
+    // {
+    //     // PointXYZ pos;
+    //     // pos.x = nodeOdom[i].pose.pose.position.x;
+    //     // pos.y = nodeOdom[i].pose.pose.position.y;
+    //     // pos.z = nodeOdom[i].pose.pose.position.z;
+        
+    //     // vector<int> point_idx; vector<float> point_sq_dist;
+    //     // kdTreeglobalMapDup[i].radiusSearch(pos, 25, point_idx, point_sq_dist);
+
+    //     CloudXYZPtr localCloud(new CloudXYZ());
+
+    //     // Copy all points belonging to the cloud_local
+    //     pcl::ConditionAnd<PointXYZ>::Ptr cyl_cond (new pcl::ConditionAnd<PointXYZ>());
+
+    //     Eigen::Matrix3f cylinderMatrixRad;
+    //     cylinderMatrixRad << 1.0, 0.0, 0.0,
+    //                          0.0, 1.0, 0.0,
+    //                          0.0, 0.0, 0.0;
+    //     float cylinderRad = -25*25; //radius² of cylinder
+    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp1
+    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
+    //             (pcl::ComparisonOps::LT, cylinderMatrixRad, Eigen::Vector3f::Zero(), cylinderRad));
+    //     cyl_comp1->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
+    //     cyl_cond->addComparison(cyl_comp1);
+
+    //     Eigen::Matrix3f cylinderMatrixZPositive;
+    //     cylinderMatrixZPositive << 0.0, 0.0, 0.0,
+    //                                0.0, 0.0, 0.0,
+    //                                0.0, 0.0, 0.0;
+    //     float cylinderZpositive = 10.35;
+    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp2
+    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
+    //             (pcl::ComparisonOps::GT, cylinderMatrixZPositive, Eigen::Vector3f(0.0, 0.0, 0.5), cylinderZpositive));
+    //     cyl_comp2->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
+    //     cyl_cond->addComparison(cyl_comp2);
+
+    //     Eigen::Matrix3f cylinderMatrixZNegative;
+    //     cylinderMatrixZNegative << 0.0, 0.0, 0.0,
+    //                                0.0, 0.0, 0.0,
+    //                                0.0, 0.0, 0.0;
+    //     float cylinderZNegative = -10.35;
+    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp3
+    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
+    //             (pcl::ComparisonOps::LT, cylinderMatrixZNegative, Eigen::Vector3f(0.0, 0.0, 0.5), cylinderZNegative));    
+    //     cyl_comp3->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
+    //     cyl_cond->addComparison(cyl_comp3);
+
+    //     pcl::ConditionalRemoval<PointXYZ> condrem;
+    //     condrem.setCondition(cyl_cond);
+    //     condrem.setInputCloud(globalMap);
+    //     condrem.setKeepOrganized (false);
+
+    //     condrem.filter(*localCloud);
+
+    //     static ros::Publisher localCloudPub = nh_ptr->advertise<sensor_msgs::PointCloud2>("/local_map", 1);
+
+    //     // Publish the pointcloud
+    //     Util::publishCloud(localCloudPub, *localCloud, ros::Time::now(), string("world"));
+    // }
 }
 
 /////////////////////////////////////////////////
@@ -265,10 +364,27 @@ int main(int argc, char **argv)
     nh_ptr = boost::make_shared<ros::NodeHandle>(nh);
 
     // Subscribe to the ppcom topology
-    printf(KGRN "Subscribing to ppcom_topology" RESET);
+    printf(KGRN "Subscribing to ppcom_topology\n" RESET);
     ros::Subscriber ppcomSub = nh_ptr->subscribe("/gcs/ppcom_topology", 1, PPComCallback);
 
     // world = gazebo::physics::get_world("default");
+    
+    // Load the original pointcloud
+    string pcd_file;
+    nh_ptr->getParam("pcd_file", pcd_file);
+    printf(KGRN "Global Map file: %s\n" RESET, pcd_file.c_str());
+    pcl::io::loadPCDFile<PointXYZ>(pcd_file, *globalMap);
+    kdTreeglobalMap.setInputCloud(globalMap);
+
+    // Create a timer to publish the pointclouds at 10Hz
+    double odom_rate = 10.0;
+    nh_ptr->getParam("odom_rate", odom_rate);
+    ros::Timer odom_timer = nh_ptr->createTimer(ros::Duration(1.0/odom_rate), odomTimerCallback);
+
+    // Create a timer to publish the pointclouds at 10Hz
+    double cloud_rate = 10.0;
+    nh_ptr->getParam("cloud_rate", cloud_rate);
+    ros::Timer cloud_timer = nh_ptr->createTimer(ros::Duration(1.0/cloud_rate), cloudTimerCallback);
 
     // Initialize visualization
     los_color.r  = 0.0; los_color.g  = 1.0;  los_color.b  = 0.5; los_color.a  = 1.0;
