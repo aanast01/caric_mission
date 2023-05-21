@@ -5,6 +5,7 @@
     <arg name="sim_type"              default="rotors" />
  
     <arg name="world_name"            default="$(find caric_mission)/worlds/mbs.world" />
+    <arg name="interest_config"   default="$(find caric_mission)/models/mbs/mbs.pcd" />
 
     <arg name="enable_logging"        default="false" />
     <arg name="enable_ground_truth"   default="true" />
@@ -19,6 +20,11 @@
 
     <!-- Frequency to check the line of sight raytracing -->
     <arg name="ppcom_hz"              default="100"/>
+
+    <!-- camera position relative to drone body -->
+    <arg name="cam_rel_to_drone_x"      default="0.3" />
+    <arg name="cam_rel_to_drone_y"      default="0.0" />
+    <arg name="cam_rel_to_drone_z"      default="-0.2" />
 
     <!-- Launch the Gazebo World -->
     <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
@@ -60,10 +66,15 @@
         <arg name="ppcom_id"          value="gcs" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
+        <arg name="interest_config"   value="$(arg interest_config)" />
 
         <arg name="x"                 value="-2.0" />
         <arg name="y"                 value="08.0" />
         <arg name="z"                 value="20.0" />
+
+        <arg name="cam_rel_to_drone_x"      default="$(arg cam_rel_to_drone_x)" />
+        <arg name="cam_rel_to_drone_y"      default="$(arg cam_rel_to_drone_y)" />
+        <arg name="cam_rel_to_drone_z"      default="$(arg cam_rel_to_drone_z)" />
 
     </include>
 
