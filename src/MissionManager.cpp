@@ -37,6 +37,11 @@
 #include "visualization_msgs/Marker.h"
 #include "std_msgs/ColorRGBA.h"
 
+// Message synchronization
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
+
 #include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/filters/crop_box.h>
@@ -58,6 +63,13 @@
 
 using namespace std;
 using namespace Eigen;
+using namespace message_filters;
+
+typedef nav_msgs::Odometry OdomMsg;
+typedef nav_msgs::Odometry::ConstPtr OdomMsgPtr;
+typedef sensor_msgs::PointCloud2 CloudMsg;
+typedef sensor_msgs::PointCloud2::ConstPtr CloudMsgPtr;
+typedef sync_policies::ApproximateTime<OdomMsg, CloudMsg> MySyncPolicy;
 
 // Handles to ROS and Gazebo object
 gazebo::physics::WorldPtr world = NULL;
@@ -65,14 +77,18 @@ ros::NodeHandlePtr nh_ptr;
 
 // Topology and status checks
 std::mutex topoMtx;
-typedef nav_msgs::Odometry rosOdom;
+
 int Nnodes = 0;
 vector<string>  nodeName;
 vector<string>  nodeRole;
-vector<rosOdom> nodeOdom;
+vector<OdomMsg> nodeOdom;
 vector<string>  nodeStatus;
 vector<bool>    nodeAlive;
 MatrixXd        linkMat;
+
+deque<message_filters::Subscriber<OdomMsg>> odomSub;
+deque<message_filters::Subscriber<CloudMsg>> cloudSub;
+deque<Synchronizer<MySyncPolicy>> msgSync;
 
 // Visualization
 typedef visualization_msgs::Marker RosVizMarker;
@@ -158,6 +174,18 @@ void ContactCallback(ConstContactsPtr &_msg)
     topoMtx.unlock();
 }
 
+void odomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, int idx)
+{
+    double time_diff = (cloudMsg->header.stamp - odomMsg->header.stamp).toSec();
+    if(time_diff > 0.001)
+        printf(KRED "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
+                idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
+    // else
+    //     printf(KGRN "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
+    //             idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
+
+}
+
 void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
 {
     static bool firstshot = true;
@@ -176,6 +204,20 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         nodeAlive   = vector<bool>(Nnodes, true); // Assuming that all nodes are initially alive, one only dies when colliding stuff
         linkMat     = -Eigen::MatrixXd::Ones(Nnodes, Nnodes);
         firstshot   = false;
+
+        // Create the subscribers with synchronization
+        for(int i = 0; i < Nnodes; i++)
+        {
+            // if (nodeRole[i] == "manager")
+            //     continue;
+
+            string gndtr_topic = "/" + nodeName[i] + "/ground_truth/odometry";
+            string cloud_topic = "/" + nodeName[i] + "/velodyne_points";
+            odomSub.emplace_back(*nh_ptr, gndtr_topic, 100);
+            cloudSub.emplace_back(*nh_ptr, cloud_topic, 100);
+            msgSync.emplace_back(MySyncPolicy(10), odomSub[i], cloudSub[i]);
+            msgSync.back().registerCallback(boost::bind(&odomCloudCallback, _1, _2, i));
+        }
     }
 
     // Update the states
@@ -279,7 +321,7 @@ void cloudTimerCallback(const ros::TimerEvent& event)
 
     // // Get the node poses
     // topoMtx.lock();
-    // vector<rosOdom> nodeOdom_ = nodeOdom;
+    // vector<OdomMsg> nodeOdom_ = nodeOdom;
     // topoMtx.unlock();
 
     // // Find the pointcloud seen within a radius by each node
@@ -413,6 +455,12 @@ int main(int argc, char **argv)
 
     vizAid.marker.points.clear();
     vizAid.marker.colors.clear();
+
+    message_filters::Subscriber<OdomMsg> odomSub(*nh_ptr, "/firefly1/ground_truth/odometry", 100);
+    message_filters::Subscriber<CloudMsg> cloudSub(*nh_ptr, "/firefly1/velodyne_points", 100);
+
+    Synchronizer<MySyncPolicy> sync(MySyncPolicy(10), odomSub, cloudSub);
+    sync.registerCallback(boost::bind(&odomCloudCallback, _1, _2, 0));
 
     ros::MultiThreadedSpinner spinner(0);
     spinner.spin();
