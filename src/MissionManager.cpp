@@ -17,6 +17,8 @@
 
 #include <thread>
 #include <chrono>
+#include <deque>
+#include <condition_variable>
 
 #include <iostream>
 #include <Eigen/Eigen>
@@ -43,9 +45,11 @@
 #include <message_filters/sync_policies/approximate_time.h>
 
 #include <pcl/io/pcd_io.h>
+#include <pcl/filters/uniform_sampling.h>
+#include <pcl/filters/impl/uniform_sampling.hpp>
 #include <pcl/kdtree/kdtree_flann.h>
-#include <pcl/filters/crop_box.h>
-#include <pcl/filters/conditional_removal.h>
+// #include <pcl/search/impl/kdtree.hpp>
+#include <pcl/kdtree/impl/kdtree_flann.hpp>
 
 #include "tcc/Stop.h"
 #include "utility.h"
@@ -65,6 +69,14 @@ using namespace std;
 using namespace Eigen;
 using namespace message_filters;
 
+// Extrinsic of the lidar
+// TODO: Make this a parameter
+myTf<double> tf_B_L(Quaternd::Identity(), Vector3d(0, 0, 0.2));
+double map_spacing_size = 0.2;
+int num_neighbors = 5;
+double kf_min_dis = 2.0;
+double kf_min_angle = 10.0;
+
 typedef nav_msgs::Odometry OdomMsg;
 typedef nav_msgs::Odometry::ConstPtr OdomMsgPtr;
 typedef sensor_msgs::PointCloud2 CloudMsg;
@@ -76,7 +88,7 @@ gazebo::physics::WorldPtr world = NULL;
 ros::NodeHandlePtr nh_ptr;
 
 // Topology and status checks
-std::mutex topoMtx;
+std::mutex topo_mtx;
 
 int Nnodes = 0;
 vector<string>  nodeName;
@@ -89,6 +101,15 @@ MatrixXd        linkMat;
 deque<message_filters::Subscriber<OdomMsg>> odomSub;
 deque<message_filters::Subscriber<CloudMsg>> cloudSub;
 deque<Synchronizer<MySyncPolicy>> msgSync;
+
+// Local SLAM
+deque<CloudPosePtr> kfPose;
+deque<deque<CloudXYZIPtr>> kfCloud;
+deque<ros::Publisher> kfPosePub;
+deque<ros::Publisher> slfKfCloudPub;
+deque<ros::Publisher> cloudInWPub;
+deque<std::mutex> nbr_kf_pub_mtx;
+deque<ros::Publisher> nbrKfCloudPub;
 
 // Visualization
 typedef visualization_msgs::Marker RosVizMarker;
@@ -119,7 +140,7 @@ void ContactCallback(ConstContactsPtr &_msg)
     if (Nnodes == 0)
         return;
 
-    topoMtx.lock();
+    topo_mtx.lock();
 
     vector<bool> deadNode(Nnodes, false);
     for (int i = 0; i < _msg->contact_size(); ++i)
@@ -171,26 +192,128 @@ void ContactCallback(ConstContactsPtr &_msg)
         }
     }
 
-    topoMtx.unlock();
+    topo_mtx.unlock();
 }
 
-void odomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, int idx)
+void UpdateSLAMDatabase(int slfIdx, PointPose pose, CloudXYZIPtr &cloud)
 {
+    pcl::UniformSampling<PointXYZI> downsampler;
+    downsampler.setRadiusSearch(map_spacing_size);
+    downsampler.setInputCloud(cloud);
+    downsampler.filter(*cloud);
+
+    kfPose[slfIdx]->push_back(pose);
+    kfCloud[slfIdx].push_back(cloud);
+    Util::publishCloud(kfPosePub[slfIdx], *kfPose[slfIdx], ros::Time(pose.t), string("world"));
+    Util::publishCloud(slfKfCloudPub[slfIdx], *cloud, ros::Time(pose.t), string("world"));
+
+    // Check if there is line of sight to other nodes and publish this kf cloud
+    for (int nbrIdx = 0; nbrIdx < Nnodes; nbrIdx++)
+    {
+        // Skip if nbr is self, or nbr is dead, or there is no los
+        if (nbrIdx == slfIdx || nodeAlive[nbrIdx] == false || linkMat(slfIdx, nbrIdx) < 0.0)
+        continue;
+
+        nbr_kf_pub_mtx[nbrIdx].lock();
+        Util::publishCloud(nbrKfCloudPub[nbrIdx], *cloud, ros::Time(pose.t), string("world"));
+        nbr_kf_pub_mtx[nbrIdx].unlock();
+    }
+}
+
+void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, int idx)
+{
+    // Do nothing if node is dead
+    if (!nodeAlive[idx])
+        return;
+
     double time_diff = (cloudMsg->header.stamp - odomMsg->header.stamp).toSec();
     if(time_diff > 0.001)
-        printf(KRED "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
-                idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
+    {
+        // printf(KRED "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
+        //         idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
+        return;
+    }
     // else
     //     printf(KGRN "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
     //             idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
 
+    myTf tf_W_B(*odomMsg);
+    PointPose pose_W_B = tf_W_B.Pose6D(odomMsg->header.stamp.toSec());
+
+    // Transform lidar into the world frame and publish it for visualization
+    CloudXYZIPtr cloud(new CloudXYZI());
+    pcl::fromROSMsg(*cloudMsg, *cloud);
+    pcl::transformPointCloud(*cloud, *cloud, (tf_W_B*tf_B_L).cast<float>().tfMat());
+    Util::publishCloud(cloudInWPub[idx], *cloud, cloudMsg->header.stamp, string("world"));
+
+    // Save the key frame and key cloud
+    if (kfPose[idx]->size() == 0)
+    {
+        UpdateSLAMDatabase(idx, tf_W_B.Pose6D(odomMsg->header.stamp.toSec()), cloud);
+    }
+    else if(odomMsg->header.stamp.toSec() - kfPose[idx]->back().t > 1.0)
+    {
+        // Check the distance to register a new keyframe
+        pcl::KdTreeFLANN<PointPose> kdTreeKeyFrames;
+        kdTreeKeyFrames.setInputCloud(kfPose[idx]);
+
+        vector<int> knn_idx(num_neighbors, 0);
+        vector<float> kk_sq_dis(num_neighbors, 0);
+        kdTreeKeyFrames.nearestKSearch(pose_W_B, num_neighbors, knn_idx, kk_sq_dis);
+
+        // Check for far distance and far angle
+        bool far_distance = kk_sq_dis.front() > kf_min_dis*kf_min_dis;
+        bool far_angle = true;
+        for(int i = 0; i < knn_idx.size(); i++)
+        {
+            int kf_idx = knn_idx[i];
+
+            // Collect the angle difference
+            Quaternd Qa(kfPose[idx]->points[kf_idx].qw,
+                        kfPose[idx]->points[kf_idx].qx,
+                        kfPose[idx]->points[kf_idx].qy,
+                        kfPose[idx]->points[kf_idx].qz);
+
+            Quaternd &Qb = tf_W_B.rot;
+
+            // If the angle is more than 10 degrees, add this to the key pose
+            if (fabs(Util::angleDiff(Qa, Qb)) < kf_min_angle)
+            {
+                far_angle = false;
+                break;
+            }
+        }
+
+        // Admit the key frame if sufficiently spaced and publish it to neigbours
+        if(far_distance || far_angle)
+        {
+            UpdateSLAMDatabase(idx, tf_W_B.Pose6D(odomMsg->header.stamp.toSec()), cloud);
+            
+            // kfPose[idx]->push_back(tf_W_B.Pose6D(odomMsg->header.stamp.toSec()));
+            // kfCloud[idx].push_back(cloud);
+            // Util::publishCloud(kfPosePub[idx], *kfPose[idx], cloudMsg->header.stamp, string("world"));
+            // Util::publishCloud(slfKfCloudPub[idx], *cloud, cloudMsg->header.stamp, string("world"));
+
+            // // Check if there is line of sight to other nodes and publish this kf cloud
+            // for (int nbrIdx = 0; nbrIdx < Nnodes; nbrIdx++)
+            // {
+            //     // Skip if nbr is self, or nbr is dead, or there is no los
+            //     if (nbrIdx == idx || nodeAlive[nbrIdx] == false || linkMat(idx, nbrIdx) < 0.0)
+            //         continue;
+
+            //     nbr_kf_pub_mtx[nbrIdx].lock();
+            //     Util::publishCloud(nbrKfCloudPub[nbrIdx], *cloud, cloudMsg->header.stamp, string("world"));
+            //     nbr_kf_pub_mtx[nbrIdx].unlock();
+            // }
+        }
+    }
 }
 
 void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
 {
     static bool firstshot = true;
 
-    topoMtx.lock();
+    topo_mtx.lock();
 
     // printf(KGRN "PPComCallback\n" RESET);
 
@@ -204,7 +327,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         nodeAlive   = vector<bool>(Nnodes, true); // Assuming that all nodes are initially alive, one only dies when colliding stuff
         linkMat     = -Eigen::MatrixXd::Ones(Nnodes, Nnodes);
         firstshot   = false;
-
+        
         // Create the subscribers with synchronization
         for(int i = 0; i < Nnodes; i++)
         {
@@ -216,8 +339,21 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             odomSub.emplace_back(*nh_ptr, gndtr_topic, 100);
             cloudSub.emplace_back(*nh_ptr, cloud_topic, 100);
             msgSync.emplace_back(MySyncPolicy(10), odomSub[i], cloudSub[i]);
-            msgSync.back().registerCallback(boost::bind(&odomCloudCallback, _1, _2, i));
+            msgSync.back().registerCallback(boost::bind(&OdomCloudCallback, _1, _2, i));
+
+            // Local SLAM database
+            kfPose.push_back(CloudPosePtr(new CloudPose()));
+            kfCloud.push_back(deque<CloudXYZIPtr>());
+
+            // Publisher for local slam
+            kfPosePub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/kf_pose", 1));
+            slfKfCloudPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/slf_kf_cloud", 1));
+            cloudInWPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/cloud_inW", 1));
+
+            nbr_kf_pub_mtx.emplace_back();
+            nbrKfCloudPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/nbr_kf_cloud", 1));
         }
+
     }
 
     // Update the states
@@ -250,7 +386,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             nodeStatus[i] = "on_ground";
     }
 
-    topoMtx.unlock();
+    topo_mtx.unlock();
 
     // Update the link visualization
     vizAid.marker.points.clear();
@@ -299,94 +435,6 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     vizAid.rosPub.publish(vizAid.marker);
 }
 
-// Callback function for poses
-void odomTimerCallback(const ros::TimerEvent& event)
-{
-
-}
-
-// Callback function for pointcloud
-void cloudTimerCallback(const ros::TimerEvent& event)
-{
-    // if (Nnodes == 0)
-    //     return;
-    
-    // // Duplicate the tree of global map 
-    // static vector<pcl::KdTreeFLANN<PointXYZ>> kdTreeglobalMapDup(Nnodes, kdTreeglobalMap);
-    // static bool firstshot = true;
-    // // if (firstshot)
-    // // {
-    // //     firstshot = false;
-    // // }
-
-    // // Get the node poses
-    // topoMtx.lock();
-    // vector<OdomMsg> nodeOdom_ = nodeOdom;
-    // topoMtx.unlock();
-
-    // // Find the pointcloud seen within a radius by each node
-    // for(int i = 1; i < 2; i++)
-    // {
-    //     // PointXYZ pos;
-    //     // pos.x = nodeOdom[i].pose.pose.position.x;
-    //     // pos.y = nodeOdom[i].pose.pose.position.y;
-    //     // pos.z = nodeOdom[i].pose.pose.position.z;
-        
-    //     // vector<int> point_idx; vector<float> point_sq_dist;
-    //     // kdTreeglobalMapDup[i].radiusSearch(pos, 25, point_idx, point_sq_dist);
-
-    //     CloudXYZPtr localCloud(new CloudXYZ());
-
-    //     // Copy all points belonging to the cloud_local
-    //     pcl::ConditionAnd<PointXYZ>::Ptr cyl_cond (new pcl::ConditionAnd<PointXYZ>());
-
-    //     Eigen::Matrix3f cylinderMatrixRad;
-    //     cylinderMatrixRad << 1.0, 0.0, 0.0,
-    //                          0.0, 1.0, 0.0,
-    //                          0.0, 0.0, 0.0;
-    //     float cylinderRad = -25*25; //radius² of cylinder
-    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp1
-    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
-    //             (pcl::ComparisonOps::LT, cylinderMatrixRad, Eigen::Vector3f::Zero(), cylinderRad));
-    //     cyl_comp1->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
-    //     cyl_cond->addComparison(cyl_comp1);
-
-    //     Eigen::Matrix3f cylinderMatrixZPositive;
-    //     cylinderMatrixZPositive << 0.0, 0.0, 0.0,
-    //                                0.0, 0.0, 0.0,
-    //                                0.0, 0.0, 0.0;
-    //     float cylinderZpositive = 10.35;
-    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp2
-    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
-    //             (pcl::ComparisonOps::GT, cylinderMatrixZPositive, Eigen::Vector3f(0.0, 0.0, 0.5), cylinderZpositive));
-    //     cyl_comp2->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
-    //     cyl_cond->addComparison(cyl_comp2);
-
-    //     Eigen::Matrix3f cylinderMatrixZNegative;
-    //     cylinderMatrixZNegative << 0.0, 0.0, 0.0,
-    //                                0.0, 0.0, 0.0,
-    //                                0.0, 0.0, 0.0;
-    //     float cylinderZNegative = -10.35;
-    //     pcl::TfQuadraticXYZComparison<PointXYZ>::Ptr cyl_comp3
-    //         (new pcl::TfQuadraticXYZComparison<PointXYZ>
-    //             (pcl::ComparisonOps::LT, cylinderMatrixZNegative, Eigen::Vector3f(0.0, 0.0, 0.5), cylinderZNegative));    
-    //     cyl_comp3->transformComparison(myTf(nodeOdom_[i]).inverse().cast<float>().tfMat());
-    //     cyl_cond->addComparison(cyl_comp3);
-
-    //     pcl::ConditionalRemoval<PointXYZ> condrem;
-    //     condrem.setCondition(cyl_cond);
-    //     condrem.setInputCloud(globalMap);
-    //     condrem.setKeepOrganized (false);
-
-    //     condrem.filter(*localCloud);
-
-    //     static ros::Publisher localCloudPub = nh_ptr->advertise<sensor_msgs::PointCloud2>("/local_map", 1);
-
-    //     // Publish the pointcloud
-    //     Util::publishCloud(localCloudPub, *localCloud, ros::Time::now(), string("world"));
-    // }
-}
-
 /////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
@@ -418,16 +466,6 @@ int main(int argc, char **argv)
     pcl::io::loadPCDFile<PointXYZ>(pcd_file, *globalMap);
     kdTreeglobalMap.setInputCloud(globalMap);
 
-    // Create a timer to publish the pointclouds at 10Hz
-    double odom_rate = 10.0;
-    nh_ptr->getParam("odom_rate", odom_rate);
-    ros::Timer odom_timer = nh_ptr->createTimer(ros::Duration(1.0/odom_rate), odomTimerCallback);
-
-    // Create a timer to publish the pointclouds at 10Hz
-    double cloud_rate = 10.0;
-    nh_ptr->getParam("cloud_rate", cloud_rate);
-    ros::Timer cloud_timer = nh_ptr->createTimer(ros::Duration(1.0/cloud_rate), cloudTimerCallback);
-
     // Initialize visualization
     los_color.r  = 0.0; los_color.g  = 1.0;  los_color.b  = 0.5; los_color.a  = 1.0;
     nlos_color.r = 1.0; nlos_color.g = 0.65; nlos_color.b = 0.0; nlos_color.a = 0.5;
@@ -455,12 +493,6 @@ int main(int argc, char **argv)
 
     vizAid.marker.points.clear();
     vizAid.marker.colors.clear();
-
-    message_filters::Subscriber<OdomMsg> odomSub(*nh_ptr, "/firefly1/ground_truth/odometry", 100);
-    message_filters::Subscriber<CloudMsg> cloudSub(*nh_ptr, "/firefly1/velodyne_points", 100);
-
-    Synchronizer<MySyncPolicy> sync(MySyncPolicy(10), odomSub, cloudSub);
-    sync.registerCallback(boost::bind(&odomCloudCallback, _1, _2, 0));
 
     ros::MultiThreadedSpinner spinner(0);
     spinner.spin();
