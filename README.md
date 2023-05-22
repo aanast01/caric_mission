@@ -26,11 +26,11 @@ mkdir -p ws_caric/src;
 catkin_init_workspace;
 cd ws_caric/src;
 
-git clone https://github.com/brytsknguyen/caric_mission
-git clone https://github.com/brytsknguyen/rotors_simulator
-git clone https://github.com/brytsknguyen/tcc
-git clone https://github.com/caomuqing/traj_gennav
-git clone https://github.com/brytsknguyen/velodyne_simulator
+git clone https://github.com/ntu-aris/caric_mission
+git clone https://github.com/ntu-aris/rotors_simulator
+git clone https://github.com/ntu-aris/tcc
+git clone https://github.com/ntu-aris/traj_gennav
+git clone https://github.com/ntu-aris/velodyne_simulator
 catkin build;
 
 source ~/ws_caric/devel/setup.bash
