@@ -182,6 +182,37 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(PointTQXYZI,
                                  (float,  qy, qy)
                                  (float,  qz, qz)
                                  (float,  qw, qw))
+struct PointOdom
+{
+    PCL_ADD_POINT4D
+    PCL_ADD_INTENSITY;              // preferred way of adding a XYZ+padding
+    double t;
+    float  qx;
+    float  qy;
+    float  qz;
+    float  qw;
+    float  vx;
+    float  vy;
+    float  vz;
+    float  ax;
+    float  ay;
+    float  az;
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW // make sure our new allocators are aligned
+} EIGEN_ALIGN16;                    // enforce SSE padding for correct memory alignment
+POINT_CLOUD_REGISTER_POINT_STRUCT(PointOdom,
+                                 (float,  x, x) (float,  y, y) (float,  z, z)
+                                 (float,  intensity, intensity)
+                                 (double, t,  t)
+                                 (float,  qx, qx)
+                                 (float,  qy, qy)
+                                 (float,  qz, qz)
+                                 (float,  qw, qw)
+                                 (float,  vx, vx)
+                                 (float,  vy, vy)
+                                 (float,  vz, vz)
+                                 (float,  ax, aw)
+                                 (float,  ay, ax)
+                                 (float,  az, ay))
 
 struct PointXYZIT
 {
@@ -202,6 +233,7 @@ typedef pcl::PointCloud<PointXYZ> CloudXYZ;
 typedef pcl::PointCloud<PointXYZI> CloudXYZI;
 typedef pcl::PointCloud<PointXYZIT> CloudXYZIT;
 typedef pcl::PointCloud<PointPose> CloudPose;
+typedef pcl::PointCloud<PointOdom> CloudOdom;
 typedef pcl::PointCloud<PointOuster> CloudOuster;
 typedef pcl::PointCloud<PointVelodyne> CloudVelodyne;
 
@@ -210,6 +242,7 @@ typedef pcl::PointCloud<PointXYZI>::Ptr PointCloudPtr;
 typedef pcl::PointCloud<PointXYZI>::Ptr CloudXYZIPtr;
 typedef pcl::PointCloud<PointXYZIT>::Ptr CloudXYZITPtr;
 typedef pcl::PointCloud<PointPose>::Ptr CloudPosePtr;
+typedef pcl::PointCloud<PointOdom>::Ptr CloudOdomPtr;
 typedef pcl::PointCloud<PointOuster>::Ptr CloudOusterPtr;
 typedef pcl::PointCloud<PointVelodyne>::Ptr CloudVelodynePtr;
 

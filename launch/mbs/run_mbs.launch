@@ -19,7 +19,7 @@
     <arg name="verbose"               default="false" />
 
     <!-- Frequency to check the line of sight raytracing -->
-    <arg name="ppcom_hz"              default="100"/>
+    <arg name="ppcom_hz"              default="50"/>
 
     <!-- camera position relative to drone body -->
     <arg name="cam_rel_to_drone_x"      default="0.3" />

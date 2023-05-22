@@ -102,14 +102,18 @@ deque<message_filters::Subscriber<OdomMsg>> odomSub;
 deque<message_filters::Subscriber<CloudMsg>> cloudSub;
 deque<Synchronizer<MySyncPolicy>> msgSync;
 
-// Local SLAM
+// Local SLAM data
 deque<CloudPosePtr> kfPose;
 deque<deque<CloudXYZIPtr>> kfCloud;
 deque<ros::Publisher> kfPosePub;
 deque<ros::Publisher> slfKfCloudPub;
 deque<ros::Publisher> cloudInWPub;
+
+// Cooperative SLAM
 deque<std::mutex>     nbr_kf_pub_mtx;
 deque<ros::Publisher> nbrKfCloudPub;
+deque<std::mutex>     nbr_odom_pub_mtx;
+deque<ros::Publisher> nbrOdomPub;
 
 // Visualization
 typedef visualization_msgs::Marker RosVizMarker;
@@ -282,31 +286,14 @@ void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, i
 
         // Admit the key frame if sufficiently spaced and publish it to neigbours
         if(far_distance || far_angle)
-        {
             UpdateSLAMDatabase(idx, tf_W_B.Pose6D(odomMsg->header.stamp.toSec()), cloud);
-            
-            // kfPose[idx]->push_back(tf_W_B.Pose6D(odomMsg->header.stamp.toSec()));
-            // kfCloud[idx].push_back(cloud);
-            // Util::publishCloud(kfPosePub[idx], *kfPose[idx], cloudMsg->header.stamp, string("world"));
-            // Util::publishCloud(slfKfCloudPub[idx], *cloud, cloudMsg->header.stamp, string("world"));
-
-            // // Check if there is line of sight to other nodes and publish this kf cloud
-            // for (int nbrIdx = 0; nbrIdx < Nnodes; nbrIdx++)
-            // {
-            //     // Skip if nbr is self, or nbr is dead, or there is no los
-            //     if (nbrIdx == idx || nodeAlive[nbrIdx] == false || linkMat(idx, nbrIdx) < 0.0)
-            //         continue;
-
-            //     nbr_kf_pub_mtx[nbrIdx].lock();
-            //     Util::publishCloud(nbrKfCloudPub[nbrIdx], *cloud, cloudMsg->header.stamp, string("world"));
-            //     nbr_kf_pub_mtx[nbrIdx].unlock();
-            // }
-        }
     }
 }
 
 void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
 {
+    // TicToc tt_ppcom;
+
     static bool firstshot = true;
 
     topo_mtx.lock();
@@ -341,15 +328,17 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             kfPose.push_back(CloudPosePtr(new CloudPose()));
             kfCloud.push_back(deque<CloudXYZIPtr>());
 
-            // Publisher for local slam
+            // Publisher for local SLAM
             kfPosePub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/kf_pose", 1));
             slfKfCloudPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/slf_kf_cloud", 1));
             cloudInWPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/cloud_inW", 1));
 
+            // Publisher for cooperative SLAM
             nbr_kf_pub_mtx.emplace_back();
             nbrKfCloudPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/nbr_kf_cloud", 1));
+            nbr_odom_pub_mtx.emplace_back();
+            nbrOdomPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/nbr_odom_cloud", 1));
         }
-
     }
 
     // Update the states
@@ -383,6 +372,51 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     }
 
     topo_mtx.unlock();
+
+    // Publish the neighbour odom under line of sight
+    for(int i = 0; i < Nnodes; i++)
+    {
+        CloudOdomPtr nbrOdom(new CloudOdom());
+        for(int j = 0; j < Nnodes; j++)
+        {
+            // Skip if node is not alive or there is no line of sight
+            if (!nodeAlive[j] || linkMat(i, j) < 0.0)
+                continue;
+
+            PointOdom odom;
+            
+            // Node id
+            odom.intensity = j;
+
+            // Time stamp
+            odom.t  = nodeOdom[j].header.stamp.toSec();
+            
+            // Position
+            odom.x  = nodeOdom[j].pose.pose.position.x;
+            odom.y  = nodeOdom[j].pose.pose.position.y;
+            odom.z  = nodeOdom[j].pose.pose.position.z;
+
+            // Quaternion
+            odom.qx = nodeOdom[j].pose.pose.orientation.x;
+            odom.qy = nodeOdom[j].pose.pose.orientation.y;
+            odom.qz = nodeOdom[j].pose.pose.orientation.z;
+            odom.qw = nodeOdom[j].pose.pose.orientation.w;
+
+            // Velocity
+            odom.vx = nodeOdom[j].twist.twist.linear.x;
+            odom.vy = nodeOdom[j].twist.twist.linear.y;
+            odom.vz = nodeOdom[j].twist.twist.linear.z;
+
+            // Acceleration
+            odom.ax = nodeOdom[j].twist.twist.angular.x;
+            odom.ay = nodeOdom[j].twist.twist.angular.y;
+            odom.az = nodeOdom[j].twist.twist.angular.z;
+
+            nbrOdom->push_back(odom);
+        }
+        
+        Util::publishCloud(nbrOdomPub[i], *nbrOdom, msg->header.stamp, string("world"));
+    }
 
     // Update the link visualization
     vizAid.marker.points.clear();
@@ -429,6 +463,8 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     }
 
     vizAid.rosPub.publish(vizAid.marker);
+
+    // printf("ppcomcb: %f\n", tt_ppcom.Toc());
 }
 
 /////////////////////////////////////////////////

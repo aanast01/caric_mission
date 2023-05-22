@@ -56,7 +56,7 @@ Visualization Manager:
       Buffer Length: 10
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: true
+      Enabled: false
       Head Diameter: 0.30000001192092896
       Head Length: 0.20000000298023224
       Length: 0.30000001192092896
@@ -75,7 +75,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic: /nominal_path
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
       Enabled: false
       Marker Topic: /visualization_marker
@@ -403,7 +403,7 @@ Visualization Manager:
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
-          Color: 252; 175; 62
+          Color: 0; 255; 0
           Color Transformer: FlatColor
           Decay Time: 0
           Enabled: true
@@ -431,7 +431,7 @@ Visualization Manager:
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
-          Color: 245; 121; 0
+          Color: 0; 126; 255
           Color Transformer: FlatColor
           Decay Time: 1000
           Enabled: true
@@ -442,7 +442,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 2
+          Size (Pixels): 3
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /firefly1/slf_kf_cloud
@@ -488,10 +488,10 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: Intensity
+          Color Transformer: FlatColor
           Decay Time: 0
           Enabled: true
-          Invert Rainbow: false
+          Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
           Name: /firefly1/cloud_inW
@@ -502,6 +502,34 @@ Visualization Manager:
           Size (m): 0.10000000149011612
           Style: Points
           Topic: /firefly1/cloud_inW
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: FF1NbrOdom
+          Position Transformer: XYZ
+          Queue Size: 1
+          Selectable: true
+          Size (Pixels): 20
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /firefly1/nbr_odom_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -519,7 +547,7 @@ Visualization Manager:
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
-          Color: 252; 175; 62
+          Color: 0; 255; 0
           Color Transformer: FlatColor
           Decay Time: 0
           Enabled: true
@@ -547,7 +575,7 @@ Visualization Manager:
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
-          Color: 245; 121; 0
+          Color: 255; 0; 0
           Color Transformer: FlatColor
           Decay Time: 1000
           Enabled: true
@@ -604,7 +632,7 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: Intensity
+          Color Transformer: FlatColor
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
@@ -622,7 +650,7 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
-      Enabled: true
+      Enabled: false
       Name: F3SLAM
   Enabled: true
   Global Options:
@@ -652,7 +680,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 103.29131317138672
+      Distance: 120.421142578125
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -660,17 +688,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 42.9192008972168
-        Y: -3.6441750526428223
-        Z: 25.786842346191406
+        X: 40.98009490966797
+        Y: 3.4358201026916504
+        Z: 23.591150283813477
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.25979745388031006
+      Pitch: 0.36479660868644714
       Target Frame: <Fixed Frame>
-      Yaw: 4.821335315704346
+      Yaw: 4.585994720458984
     Saved: ~
 Window Geometry:
   Displays:
