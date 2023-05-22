@@ -50,9 +50,11 @@
     <node name="mission_manager" pkg="caric_mission" type="caric_mission_mission_manager_node"
           output="screen" launch-prefix="bash -c 'sleep 10; echo LAUNCHING MISSION MANAGER...; $0 $@'">
           
-          <param name="pcd_file"   type="string" value="$(find caric_mission)/models/mbs/caric_mbs_cloud.pcd"/>
-          <param name="odom_rate"  type="double" value="10"/>
-          <param name="cloud_rate" type="double" value="10"/>
+          <param name="T_B_L"       type="string" value="0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0"/>
+          <param name="kf_knn_num"  type="double" value="5"/>
+          <param name="kf_min_dis"  type="double" value="2.0"/>
+          <param name="kf_min_ang"  type="double" value="10"/>
+          <param name="kf_voxsize"  type="double" value="0.5"/>
 
     </node>
 

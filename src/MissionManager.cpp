@@ -70,12 +70,12 @@ using namespace Eigen;
 using namespace message_filters;
 
 // Extrinsic of the lidar
-// TODO: Make this a parameter
+// TODO: Make these into rosparams
 myTf<double> tf_B_L(Quaternd::Identity(), Vector3d(0, 0, 0.2));
-double map_spacing_size = 0.2;
-int num_neighbors = 5;
-double kf_min_dis = 2.0;
-double kf_min_angle = 10.0;
+int    kf_knn_num = 05.0;
+double kf_min_dis = 02.0;
+double kf_min_ang = 10.0;
+double kf_voxsize = 00.5;
 
 typedef nav_msgs::Odometry OdomMsg;
 typedef nav_msgs::Odometry::ConstPtr OdomMsgPtr;
@@ -108,7 +108,7 @@ deque<deque<CloudXYZIPtr>> kfCloud;
 deque<ros::Publisher> kfPosePub;
 deque<ros::Publisher> slfKfCloudPub;
 deque<ros::Publisher> cloudInWPub;
-deque<std::mutex> nbr_kf_pub_mtx;
+deque<std::mutex>     nbr_kf_pub_mtx;
 deque<ros::Publisher> nbrKfCloudPub;
 
 // Visualization
@@ -128,10 +128,6 @@ VizAid vizAid;
 RosVizColor los_color;
 RosVizColor nlos_color;
 RosVizColor dead_color;
-
-// Map 
-CloudXYZPtr globalMap(new CloudXYZ());
-static pcl::KdTreeFLANN<PointXYZ> kdTreeglobalMap;
 
 /////////////////////////////////////////////////
 // Function is called everytime a message is received.
@@ -198,7 +194,7 @@ void ContactCallback(ConstContactsPtr &_msg)
 void UpdateSLAMDatabase(int slfIdx, PointPose pose, CloudXYZIPtr &cloud)
 {
     pcl::UniformSampling<PointXYZI> downsampler;
-    downsampler.setRadiusSearch(map_spacing_size);
+    downsampler.setRadiusSearch(kf_voxsize);
     downsampler.setInputCloud(cloud);
     downsampler.filter(*cloud);
 
@@ -257,9 +253,9 @@ void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, i
         pcl::KdTreeFLANN<PointPose> kdTreeKeyFrames;
         kdTreeKeyFrames.setInputCloud(kfPose[idx]);
 
-        vector<int> knn_idx(num_neighbors, 0);
-        vector<float> kk_sq_dis(num_neighbors, 0);
-        kdTreeKeyFrames.nearestKSearch(pose_W_B, num_neighbors, knn_idx, kk_sq_dis);
+        vector<int> knn_idx(kf_knn_num, 0);
+        vector<float> kk_sq_dis(kf_knn_num, 0);
+        kdTreeKeyFrames.nearestKSearch(pose_W_B, kf_knn_num, knn_idx, kk_sq_dis);
 
         // Check for far distance and far angle
         bool far_distance = kk_sq_dis.front() > kf_min_dis*kf_min_dis;
@@ -277,7 +273,7 @@ void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, i
             Quaternd &Qb = tf_W_B.rot;
 
             // If the angle is more than 10 degrees, add this to the key pose
-            if (fabs(Util::angleDiff(Qa, Qb)) < kf_min_angle)
+            if (fabs(Util::angleDiff(Qa, Qb)) < kf_min_ang)
             {
                 far_angle = false;
                 break;
@@ -445,7 +441,7 @@ int main(int argc, char **argv)
     gazebo::transport::NodePtr node(new gazebo::transport::Node());
     node->Init();
 
-    // Listen to Gazebo world_stats topic
+    // Listen to Gazebo contact topic
     gazebo::transport::SubscriberPtr sub = node->Subscribe("/gazebo/default/physics/contacts", ContactCallback);
 
     // Create a ros node to subscribe to ros environment
@@ -458,13 +454,26 @@ int main(int argc, char **argv)
     ros::Subscriber ppcomSub = nh_ptr->subscribe("/gcs/ppcom_topology", 1, PPComCallback);
 
     // world = gazebo::physics::get_world("default");
+
+    // Get the parameters
+    // Transform from body to lidar
+    vector<double> T_B_L_ = {0.0, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0};
+    nh_ptr->getParam("T_B_L", T_B_L_);
+    tf_B_L = myTf(Quaternd(T_B_L_[3], T_B_L_[4], T_B_L_[5], T_B_L_[6]),
+                  Vector3d(T_B_L_[0], T_B_L_[1], T_B_L_[2]));
+    printf("tf_B_L:\n");
+    cout << tf_B_L.tfMat() << endl;
+    // SLAM parameters
+    nh_ptr->param("kf_knn_num", kf_knn_num);
+    nh_ptr->param("kf_min_dis", kf_min_dis);
+    nh_ptr->param("kf_min_ang", kf_min_ang);
+    nh_ptr->param("kf_voxsize", kf_voxsize);
+    printf(KGRN "SLAM params: \n" RESET);
+    printf(KGRN "\tkf_knn_num: %d\n" RESET, kf_knn_num);
+    printf(KGRN "\tkf_min_dis: %06.3f\n" RESET, kf_min_dis);
+    printf(KGRN "\tkf_min_ang: %06.3f\n" RESET, kf_min_ang);
+    printf(KGRN "\tkf_voxsize: %06.3f\n" RESET, kf_voxsize);
     
-    // Load the original pointcloud
-    string pcd_file;
-    nh_ptr->getParam("pcd_file", pcd_file);
-    printf(KGRN "Global Map file: %s\n" RESET, pcd_file.c_str());
-    pcl::io::loadPCDFile<PointXYZ>(pcd_file, *globalMap);
-    kdTreeglobalMap.setInputCloud(globalMap);
 
     // Initialize visualization
     los_color.r  = 0.0; los_color.g  = 1.0;  los_color.b  = 0.5; los_color.a  = 1.0;
