@@ -237,7 +237,7 @@ void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, i
     //     printf(KGRN "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
     //             idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
 
-    myTf tf_W_B(*odomMsg);
+    myTf<double> tf_W_B(*odomMsg);
     PointPose pose_W_B = tf_W_B.Pose6D(odomMsg->header.stamp.toSec());
 
     // Transform lidar into the world frame and publish it for visualization
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
     // Transform from body to lidar
     vector<double> T_B_L_ = {0.0, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0};
     nh_ptr->getParam("T_B_L", T_B_L_);
-    tf_B_L = myTf(Quaternd(T_B_L_[3], T_B_L_[4], T_B_L_[5], T_B_L_[6]),
+    tf_B_L = myTf<double>(Quaternd(T_B_L_[3], T_B_L_[4], T_B_L_[5], T_B_L_[6]),
                   Vector3d(T_B_L_[0], T_B_L_[1], T_B_L_[2]));
     printf("tf_B_L:\n");
     cout << tf_B_L.tfMat() << endl;
