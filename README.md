@@ -41,5 +41,5 @@ source ~/ws_caric/devel/setup.bash
 
 ```
 roscd caric_mission/scripts;
-bash launch_mbs.sh
+bash launch_all.sh
 ```
