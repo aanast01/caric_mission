@@ -13,11 +13,11 @@
     <arg name="ppcom_hz"              default="10" />
 
     <arg name="world_name"            default="$(find rotors_gazebo)/worlds/city12_tiltedbuildings.world" />
-    <arg name="enable_logging"        default="false" />
     <arg name="enable_ground_truth"   default="true" />
+    <!-- <arg name="enable_logging"        default="false" /> -->
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="true" />
+    <arg name="gui"                   default="false" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -45,24 +45,19 @@
     </include> -->
 
 
-
     <group ns="$(arg namespace)">
-
 
         <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
             
             <arg name="mav_name"            value="$(arg namespace)" />
             <arg name="model"               value="$(arg model)" />
-            <arg name="enable_logging"      value="$(arg enable_logging)" />
             <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
-            <arg name="log_file"            value="$(arg namespace)" />
             <arg name="x"                   value="$(arg start_x)" />
             <arg name="y"                   value="$(arg start_y)" />
             <arg name="ppcom_id"            value="$(arg ppcom_id)" />
             <arg name="ppcom_config"        value="$(arg ppcom_config)" />
             
         </include>
-
 
         <node respawn="false" pkg="traj_gennav" type="traj_gennav_node" name="traj_gennav" output="screen" 
               launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
@@ -79,7 +74,6 @@
                    to="/$(arg namespace)/command/trajectory" />
 
         </node>
-
 
         <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen"
               launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
@@ -100,8 +94,6 @@
 
         </node>
 
-
-
         <node name="PID_attitude_controller" pkg="mav_lowlevel_attitude_controller"
               type="mav_pid_attitude_controller_node" respawn="true" clear_params="true" output="screen"
               launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
@@ -110,8 +102,6 @@
             <remap from="odometry" to="/$(arg namespace)/$(arg odom_topic)" />
 
         </node>
-
-
 
     </group>
 

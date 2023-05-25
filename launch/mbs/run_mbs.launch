@@ -5,13 +5,13 @@
     <arg name="sim_type"              default="rotors" />
  
     <arg name="world_name"            default="$(find caric_mission)/worlds/mbs.world" />
-    <arg name="interest_config"   default="$(find caric_mission)/models/mbs/mbs.pcd" />
+    <arg name="interest_config"       default="$(find caric_mission)/models/mbs/mbs.pcd" />
 
     <arg name="enable_logging"        default="false" />
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="true" />
+    <arg name="gui"                   default="false" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -31,6 +31,7 @@
     <env name="GAZEBO_RESOURCE_PATH"  value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name"        value="$(arg world_name)" />
+        <arg name="headless"          value="false"/>
         <arg name="debug"             value="$(arg debug)" />
         <arg name="paused"            value="$(arg paused)" />
         <arg name="gui"               value="$(arg gui)" />
@@ -57,6 +58,10 @@
           <param name="kf_voxsize"  type="double" value="0.5"/>
 
     </node>
+
+    <!-- Launch the ppcom router -->
+    <!-- <node name="ppcom_router" pkg="caric_mission" type="ppcom_router.py" output="screen">
+    </node> -->
 
 
     <!-- Spawning the ground station -->

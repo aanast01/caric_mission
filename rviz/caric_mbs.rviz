@@ -313,7 +313,7 @@ Visualization Manager:
           Marker Topic: /firefly1/visualize
           Name: CamFOV1
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -321,7 +321,7 @@ Visualization Manager:
           Marker Topic: /firefly2/visualize
           Name: CamFOV2
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -329,7 +329,7 @@ Visualization Manager:
           Marker Topic: /firefly3/visualize
           Name: CamFOV3
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -337,7 +337,7 @@ Visualization Manager:
           Marker Topic: /firefly4/visualize
           Name: CamFOV4
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -345,7 +345,7 @@ Visualization Manager:
           Marker Topic: /firefly5/visualize
           Name: CamFOV5
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
       Enabled: true
@@ -384,9 +384,9 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 1
       Selectable: false
-      Size (Pixels): 10
+      Size (Pixels): 5
       Size (m): 0.5
-      Style: Flat Squares
+      Style: Points
       Topic: /interest_cloud
       Unreliable: false
       Use Fixed Frame: true
@@ -397,8 +397,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 10
-            Min Value: -10
+            Max Value: 28.950645446777344
+            Min Value: 0.0799637958407402
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -425,14 +425,14 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 37.689422607421875
-            Min Value: -0.1522514820098877
+            Max Value: 30.390989303588867
+            Min Value: -0.10103321075439453
             Value: true
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 0; 126; 255
-          Color Transformer: FlatColor
+          Color Transformer: AxisColor
           Decay Time: 1000
           Enabled: true
           Invert Rainbow: false
@@ -442,7 +442,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 3
+          Size (Pixels): 1
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /firefly1/slf_kf_cloud
@@ -453,14 +453,14 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 37.689422607421875
-            Min Value: -0.1522514820098877
+            Max Value: 30.477283477783203
+            Min Value: -0.20215487480163574
             Value: true
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 237; 212; 0
-          Color Transformer: FlatColor
+          Color Transformer: AxisColor
           Decay Time: 1000
           Enabled: true
           Invert Rainbow: false
@@ -470,7 +470,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 2
+          Size (Pixels): 1
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /firefly1/nbr_kf_cloud
@@ -490,7 +490,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: FlatColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -505,7 +505,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -680,7 +680,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 120.421142578125
+      Distance: 112.01415252685547
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -688,17 +688,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 40.98009490966797
-        Y: 3.4358201026916504
-        Z: 23.591150283813477
+        X: 36.519287109375
+        Y: 2.0135693550109863
+        Z: 27.331287384033203
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.36479660868644714
+      Pitch: 0.23479652404785156
       Target Frame: <Fixed Frame>
-      Yaw: 4.585994720458984
+      Yaw: 4.651010990142822
     Saved: ~
 Window Geometry:
   Displays:

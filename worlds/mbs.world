@@ -1,6 +1,7 @@
+<?xml version="1.0"?>
 <sdf version='1.7'>
   <world name='default'>
-    <plugin name='ros_interface_plugin' filename='librotors_gazebo_ros_interface_plugin.so'/>
+    <plugin name='ros_interface_plugin' filename='librotors_gazebo_ros_interface_plugin.so' />
     <light name='sun' type='directional'>
       <cast_shadows>0</cast_shadows>
       <pose>0 0 10 0 -0 0</pose>
@@ -36,13 +37,13 @@
                 <mu2>50</mu2>
               </ode>
               <torsional>
-                <ode/>
+                <ode />
               </torsional>
             </friction>
             <contact>
-              <ode/>
+              <ode />
             </contact>
-            <bounce/>
+            <bounce />
           </surface>
           <max_contacts>10</max_contacts>
         </collision>
@@ -68,7 +69,7 @@
     </model>
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
-    <atmosphere type='adiabatic'/>
+    <atmosphere type='adiabatic' />
     <physics name='default_physics' default='0' type='ode'>
       <max_step_size>0.0025</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -127,7 +128,7 @@
       </camera>
     </gui>
     <model name='mbs'>
-      <pose>0 0 0  0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <static>1</static>
       <link name='body'>
         <collision name='collision'>
@@ -140,14 +141,14 @@
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
-              <ode/>
+              <ode />
             </contact>
-            <bounce/>
+            <bounce />
             <friction>
               <torsional>
-                <ode/>
+                <ode />
               </torsional>
-              <ode/>
+              <ode />
             </friction>
           </surface>
         </collision>
@@ -163,6 +164,6 @@
         <kinematic>0</kinematic>
       </link>
     </model>
-    <wind/>
+    <wind />
   </world>
 </sdf>
