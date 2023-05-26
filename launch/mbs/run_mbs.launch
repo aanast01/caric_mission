@@ -59,9 +59,10 @@
 
     </node>
 
+
     <!-- Launch the ppcom router -->
-    <!-- <node name="ppcom_router" pkg="caric_mission" type="ppcom_router.py" output="screen">
-    </node> -->
+    <node name="ppcom_router" pkg="caric_mission" type="ppcom_router.py" output="screen">
+    </node>
 
 
     <!-- Spawning the ground station -->

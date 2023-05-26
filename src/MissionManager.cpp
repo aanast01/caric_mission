@@ -133,6 +133,9 @@ RosVizColor los_color;
 RosVizColor nlos_color;
 RosVizColor dead_color;
 
+// Dead of alive
+ros::Publisher ppcomDoAPub;
+
 /////////////////////////////////////////////////
 // Function is called everytime a message is received.
 void ContactCallback(ConstContactsPtr &_msg)
@@ -371,6 +374,13 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             nodeStatus[i] = "on_ground";
     }
 
+    // Publish the message with dead or alive check
+    rotors_comm::PPComTopology msg_ = *msg;
+    msg_.node_alive.clear();
+    for(bool doa : nodeAlive)
+        msg_.node_alive.push_back(doa);
+    ppcomDoAPub.publish(msg_);
+
     topo_mtx.unlock();
 
     // Publish the neighbour odom under line of sight
@@ -488,6 +498,10 @@ int main(int argc, char **argv)
     // Subscribe to the ppcom topology
     printf(KGRN "Subscribing to ppcom_topology\n" RESET);
     ros::Subscriber ppcomSub = nh_ptr->subscribe("/gcs/ppcom_topology", 1, PPComCallback);
+
+    // Advertise a ppcom topology with dead or alive status
+    printf(KGRN "Subscribing to ppcom_topology\n" RESET);
+    ppcomDoAPub = nh_ptr->advertise<rotors_comm::PPComTopology>("/gcs/ppcom_topology_doa", 1);
 
     // world = gazebo::physics::get_world("default");
 
