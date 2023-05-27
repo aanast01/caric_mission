@@ -1,5 +1,7 @@
+
 <launch>
-    <arg name="odom_topic"            default="ground_truth/odometry" />
+    <arg name="delay_launch"          default="1.0" /> <!-- Delay of 5 seconds to let RViz come up -->
+    <!-- <arg name="odom_topic"            default="ground_truth/odometry" /> -->
 
     <arg name="enable_thrust_control" default="false" />
     <arg name="sim_type"              default="rotors" />
@@ -41,15 +43,15 @@
 
     <!-- Visualize MBS in RVIZ -->
     <param name="/model_path" type="string" value="$(find caric_mission)/models/mbs"/>
-    <arg name="node_start_delay" default="1.0" /> <!-- Delay of 5 seconds to let RViz come up -->
-    <node name="mesh_visualizer" pkg="caric_mission" type="mesh_visualizer.py"
-          output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@'">
+    <param name="/bounding_box_path" type="string" value="$(find caric_mission)/models/mbs/bounding_boxes"/>
+    <node name="mesh_visualizer" pkg="caric_mission" type="mesh_visualizer.py" output="screen"
+          launch-prefix="bash -c 'sleep $(arg delay_launch); $0 $@'">
     </node>
 
 
     <!-- Launch the MissionManager -->
     <node name="mission_manager" pkg="caric_mission" type="caric_mission_mission_manager_node"
-          output="screen" launch-prefix="bash -c 'sleep 10; echo LAUNCHING MISSION MANAGER...; $0 $@'">
+          output="screen" launch-prefix="bash -c 'sleep delay_launch; echo LAUNCHING MISSION MANAGER...; $0 $@'">
           
           <param name="T_B_L"       type="string" value="0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0"/>
           <param name="kf_knn_num"  type="double" value="5"/>

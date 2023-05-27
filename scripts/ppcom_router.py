@@ -9,6 +9,7 @@ from rotors_comm.msg import PPComTopology
 from importlib import import_module
 from caric_mission.srv import CreatePPComTopic
 
+
 # The topology to determine whether topic can be relayed
 ppcomTopo = None
 class PPComAccess:
@@ -43,6 +44,7 @@ class PPComAccess:
         self.lock.release()
         return adj
 
+
 # Dictionary to relay data from one topic to others
 topic_to_dialogue = {}
 class Dialogue:
@@ -62,7 +64,7 @@ class Dialogue:
 
     def addPermittedEdge(self, edge):
         self.permitted_edges.add(edge)
-        
+
 
 # Update the topology
 def TopologyCallback(msg):
@@ -71,6 +73,7 @@ def TopologyCallback(msg):
 
     global ppcomTopo
     ppcomTopo.update(msg)
+
 
 # Relay the message
 def DataCallback(msg):
@@ -120,6 +123,7 @@ def DataCallback(msg):
         topic_to_dialogue[topic].target_to_pub[target_node].publish(msg)
 
     # print(f"Receive msg under {route[0]}. From {route[1]} to {route[2]}. CallerID: {conn_header['callerid']}")
+
 
 # Create a topic over the ppcom network
 def CreatePPComTopicCallback(req):

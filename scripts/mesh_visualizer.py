@@ -1,54 +1,103 @@
 #! /usr/bin/env python3
 import os
+import numpy as np
 import rospy
 import rospkg
 from visualization_msgs.msg import MarkerArray, Marker
 
-rospy.init_node("mesh_visualizer")
-rate = rospy.Rate(1)
+if __name__ == '__main__':
 
-rospy.loginfo('Initializing object visualizer')
-rp = rospkg.RosPack()
+    rospy.init_node("mesh_visualizer")
+    rate = rospy.Rate(1)
 
-visualizer_path = rospy.get_param("/model_path")
-print("model_path ", visualizer_path)
+    rospy.loginfo('Initializing object visualizer')
+    rp = rospkg.RosPack()
 
-markerArray = MarkerArray()
+    model_path = rospy.get_param("/model_path")
+    print("model_path ", model_path)
 
-publisher = rospy.Publisher('visualization_marker', MarkerArray, queue_size=1)
+    modelMarkerArray = MarkerArray()
+    modelMarkerPub = rospy.Publisher('model_viz', MarkerArray, queue_size=1)
 
-current_file_count = 0
-while not rospy.is_shutdown():
+    bbox_path = rospy.get_param("/bounding_box_path")
+    print("bounding_box_path ", bbox_path)
+    bboxMarkerArray = MarkerArray()
+    bboxMarkerPub = rospy.Publisher('bbox_viz', MarkerArray, queue_size=1)
 
-    # find all meshes in the 'meshes' folder
-    files = [ file for file in os.listdir(visualizer_path) \
-                   if file.endswith(('.dae', '.stl', '.mesh'))]
-    # if the number of valid meshed in the 'meshes' folder has changed
-    if len(files) != current_file_count:
-        # if some markers are removed from the 'meshes' folder, delete them in RViz
-        if len(files) < current_file_count:
-            marker = Marker()
-            marker.header.frame_id = 'world'
-            # send the DELETEALL marker to delete all marker in RViz
-            marker.action = marker.DELETEALL
-            markerArray.markers.append(marker)
-            publisher.publish(markerArray)
+    current_model_count = 0
+    current_bbox_count = 0
+    while not rospy.is_shutdown():
 
-        current_file_count = len(files)
-        for marker_id, file in enumerate(files):
-            rospy.loginfo('Loading file: %s', file)
-            marker = Marker()
-            marker.id = marker_id
-            marker.mesh_resource = 'package://caric_mission/models/mbs/' + file
-            marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
-            marker.type = marker.MESH_RESOURCE
-            marker.header.frame_id = "world"
-            marker.scale.x = 1.0
-            marker.scale.y = 1.0
-            marker.scale.z = 1.0
-            marker.pose.orientation.w = 1.0
-            markerArray.markers.append(marker)
+        # find all model in the model
+        files = [ file for file in os.listdir(model_path) if file.endswith(('.dae', '.stl', '.mesh'))]
 
-    # rospy.loginfo('Published %d objects. ', len(markerArray.markers))
-    publisher.publish(markerArray)
-    rate.sleep()
+        # if the number of valid meshed in the 'meshes' folder has changed
+        if len(files) != current_model_count:
+            
+            # if some markers are removed from the 'meshes' folder, delete them in RViz
+            if len(files) < current_model_count:
+                marker = Marker()
+                marker.header.frame_id = 'world'
+                # send the DELETEALL marker to delete all marker in RViz
+                marker.action = marker.DELETEALL
+                modelMarkerArray.markers.append(marker)
+                modelMarkerPub.publish(modelMarkerArray)
+
+            current_model_count = len(files)
+            for marker_id, file in enumerate(files):
+                rospy.loginfo('Loading file: %s', file)
+                marker = Marker()
+                marker.id = marker_id
+                marker.mesh_resource = 'package://caric_mission/models/mbs/' + file
+                marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
+                marker.type = marker.MESH_RESOURCE
+                marker.header.frame_id = "world"
+                marker.scale.x = 1.0
+                marker.scale.y = 1.0
+                marker.scale.z = 1.0
+                marker.pose.orientation.w = 1.0
+                marker.color.a = 0.8
+                marker.color.r = 0.0
+                marker.color.g = 1.0
+                marker.color.b = 1.0            
+                modelMarkerArray.markers.append(marker)
+        
+        modelMarkerPub.publish(modelMarkerArray)
+
+        # find all bounding box in the bounding box path
+        files = [ file for file in os.listdir(bbox_path) if file.endswith(('.dae', '.stl', '.mesh'))]
+        
+        # if the number of valid meshed in the 'meshes' folder has changed
+        if len(files) != current_bbox_count:
+            
+            # if some markers are removed from the 'meshes' folder, delete them in RViz
+            if len(files) < current_bbox_count:
+                marker = Marker()
+                marker.header.frame_id = 'world'
+                # send the DELETEALL marker to delete all marker in RViz
+                marker.action = marker.DELETEALL
+                bboxMarkerArray.markers.append(marker)
+                bboxMarkerPub.publish(bboxMarkerArray)
+
+            current_bbox_count = len(files)
+            for marker_id, file in enumerate(files):
+                rospy.loginfo('Loading file: %s', file)
+                marker = Marker()
+                marker.id = marker_id
+                marker.mesh_resource = 'package://caric_mission/models/mbs/bounding_boxes/' + file
+                marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
+                marker.type = marker.MESH_RESOURCE
+                marker.header.frame_id = "world"
+                marker.scale.x = 1.0
+                marker.scale.y = 1.0
+                marker.scale.z = 1.0
+                marker.pose.orientation.w = 1.0
+                marker.color.a = 0.2
+                marker.color.r = 1.0
+                marker.color.g = 0.9
+                marker.color.b = 0.0            
+                bboxMarkerArray.markers.append(marker)
+
+        bboxMarkerPub.publish(bboxMarkerArray)
+        
+        rate.sleep()
