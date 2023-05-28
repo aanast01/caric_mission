@@ -43,6 +43,21 @@ class PPComAccess:
         adj = self.adjacency
         self.lock.release()
         return adj
+    
+    def getSimpleAdj(self):
+        self.lock.acquire()
+        adj = self.adjacency
+        self.lock.release()
+        
+        for i in range(0, adj.shape[0]):
+            for j in range(0, adj.shape[1]):
+                if adj[i][j] > 0.0:
+                    adj[i][j] = 1
+                else:
+                    adj[i][j] = 0
+
+        return adj
+
 
 
 # Dictionary to relay data from one topic to others
@@ -73,6 +88,11 @@ def TopologyCallback(msg):
 
     global ppcomTopo
     ppcomTopo.update(msg)
+    
+    # print("\nLOS:")
+    # adj = ppcomTopo.getSimpleAdj()
+    # for arr in adj:
+    #     print(arr)
 
 
 # Relay the message
@@ -111,13 +131,16 @@ def DataCallback(msg):
             continue
 
         # Skip if there is no line of sight between node
-        if adjacency[i, j] < 0.0:
+        if adjacency[i, j] <= 0.0:
             continue
         
         # If edege is not permitted, skip
         if (callerid, target_node) not in topic_to_dialogue[topic].permitted_edges:
-            print((callerid, target_node), "is not in pe: ", topic_to_dialogue[topic].permitted_edges)
+            # print((callerid, target_node), "is not in pe: ", topic_to_dialogue[topic].permitted_edges)
             continue
+
+        # if (i == 1 and j == 3) or (i == 3 and j == 1):
+        #     print("adj_13: ", adjacency[i, j])
         
         # Publish the message on derived topics
         topic_to_dialogue[topic].target_to_pub[target_node].publish(msg)
@@ -161,7 +184,7 @@ def CreatePPComTopicCallback(req):
         for target in targets:
 
             if target == source:
-                print(f"Target {target} is in source {source}, skipping.")
+                # print(f"Target {target} is in source {source}, skipping.")
                 continue
             
             # Permit communication from this callerid to target

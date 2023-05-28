@@ -214,8 +214,8 @@ void UpdateSLAMDatabase(int slfIdx, PointPose pose, CloudXYZIPtr &cloud)
     for (int nbrIdx = 0; nbrIdx < Nnodes; nbrIdx++)
     {
         // Skip if nbr is self, or nbr is dead, or there is no los
-        if (nbrIdx == slfIdx || nodeAlive[nbrIdx] == false || linkMat(slfIdx, nbrIdx) < 0.0)
-        continue;
+        if (nbrIdx == slfIdx || nodeAlive[nbrIdx] == false || linkMat(slfIdx, nbrIdx) <= 0.0)
+            continue;
 
         nbr_kf_pub_mtx[nbrIdx].lock();
         Util::publishCloud(nbrKfCloudPub[nbrIdx], *cloud, ros::Time(pose.t), string("world"));
@@ -390,7 +390,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         for(int j = 0; j < Nnodes; j++)
         {
             // Skip if node is not alive or there is no line of sight
-            if (!nodeAlive[j] || linkMat(i, j) < 0.0)
+            if (!nodeAlive[j] || linkMat(i, j) <= 0.0)
                 continue;
 
             PointOdom odom;

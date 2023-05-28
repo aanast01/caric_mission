@@ -23,7 +23,7 @@ if __name__ == '__main__':
     create_ppcom_topic = rospy.ServiceProxy('create_ppcom_topic', CreatePPComTopic)
 
     # Register the topic with ppcom router
-    response = create_ppcom_topic('firefly3', ['firefly2', 'firefly4'], '/ping_message', 'std_msgs', 'String')
+    response = create_ppcom_topic('firefly3', ['firefly2'], '/ping_message', 'std_msgs', 'String')
     print(f"Response {response}")
 
     # Create the publisher

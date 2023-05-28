@@ -92,7 +92,7 @@ if __name__ == '__main__':
                 marker.scale.y = 1.0
                 marker.scale.z = 1.0
                 marker.pose.orientation.w = 1.0
-                marker.color.a = 0.2
+                marker.color.a = 0.1
                 marker.color.r = 1.0
                 marker.color.g = 0.9
                 marker.color.b = 0.0            

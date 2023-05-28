@@ -1,5 +1,5 @@
 # Build the workspace
-catkin build;
+# catkin build;
 
 # Launch the drones
 

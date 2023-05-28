@@ -5,6 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LOSCheck1/Namespaces1
+        - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
+        - /GCS1/GCSNbrOdom1
+        - /F1SLAM1/FF1NbrOdom1
       Splitter Ratio: 0.6253369450569153
     Tree Height: 479
   - Class: rviz/Selection
@@ -24,7 +27,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: InterestPoints
+    SyncSource: nbr_kf_cloud
   - Class: rviz/Help
     Name: Help
 Preferences:
@@ -56,7 +59,7 @@ Visualization Manager:
       Buffer Length: 10
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: false
+      Enabled: true
       Head Diameter: 0.30000001192092896
       Head Length: 0.20000000298023224
       Length: 0.30000001192092896
@@ -75,7 +78,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic: /nominal_path
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/MarkerArray
       Enabled: true
       Marker Topic: /model_viz
@@ -99,6 +102,36 @@ Visualization Manager:
       Namespaces:
         loop_marker: true
       Queue Size: 1
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 239; 41; 41
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 0; 0
+      Max Intensity: 1
+      Min Color: 255; 255; 255
+      Min Intensity: 0
+      Name: InterestPoints
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: false
+      Size (Pixels): 10
+      Size (m): 0.5
+      Style: Spheres
+      Topic: /interest_cloud
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
       Value: true
     - Class: rviz/Group
       Displays:
@@ -321,7 +354,7 @@ Visualization Manager:
           Marker Topic: /firefly1/visualize
           Name: CamFOV1
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -329,7 +362,7 @@ Visualization Manager:
           Marker Topic: /firefly2/visualize
           Name: CamFOV2
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -337,7 +370,7 @@ Visualization Manager:
           Marker Topic: /firefly3/visualize
           Name: CamFOV3
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -345,7 +378,7 @@ Visualization Manager:
           Marker Topic: /firefly4/visualize
           Name: CamFOV4
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -353,7 +386,7 @@ Visualization Manager:
           Marker Topic: /firefly5/visualize
           Name: CamFOV5
           Namespaces:
-            {}
+            view_agent_1: true
           Queue Size: 100
           Value: true
       Enabled: true
@@ -370,43 +403,13 @@ Visualization Manager:
       Voxel Alpha: 1
       Voxel Coloring: Z-Axis
       Voxel Rendering: Occupied Voxels
-    - Alpha: 1
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 239; 41; 41
-      Color Transformer: Intensity
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 0; 0
-      Max Intensity: 1
-      Min Color: 255; 255; 255
-      Min Intensity: 0
-      Name: InterestPoints
-      Position Transformer: XYZ
-      Queue Size: 1
-      Selectable: false
-      Size (Pixels): 7
-      Size (m): 0.5
-      Style: Points
-      Topic: /interest_cloud
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
-      Value: true
     - Class: rviz/Group
       Displays:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 54.06301498413086
-            Min Value: -0.14917105436325073
+            Max Value: 33.38668441772461
+            Min Value: -0.16567754745483398
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -422,7 +425,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 2
+          Size (Pixels): 1
           Size (m): 1
           Style: Points
           Topic: /gcs/nbr_kf_cloud
@@ -431,7 +434,7 @@ Visualization Manager:
           Use rainbow: true
           Value: true
         - Alpha: 1
-          Autocompute Intensity Bounds: true
+          Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
             Max Value: 10
             Min Value: -10
@@ -445,7 +448,9 @@ Visualization Manager:
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
+          Max Intensity: 5
           Min Color: 0; 0; 0
+          Min Intensity: 0
           Name: GCSNbrOdom
           Position Transformer: XYZ
           Queue Size: 1
@@ -493,8 +498,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 21.836170196533203
-            Min Value: -0.0526391826570034
+            Max Value: 21.83275604248047
+            Min Value: -0.05235515162348747
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -521,8 +526,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 45.51526641845703
-            Min Value: -1.3285231590270996
+            Max Value: 21.73942756652832
+            Min Value: -0.052293628454208374
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -558,7 +563,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: FlatColor
           Decay Time: 0
-          Enabled: false
+          Enabled: true
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -573,7 +578,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: false
+          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -748,7 +753,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 123.59458923339844
+      Distance: 137.6728973388672
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -756,17 +761,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 40.41324234008789
-        Y: 6.638116359710693
-        Z: 28.44178581237793
+        X: 38.441349029541016
+        Y: 7.695077419281006
+        Z: 29.783414840698242
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.1447969228029251
+      Pitch: -0.035202957689762115
       Target Frame: <Fixed Frame>
-      Yaw: 4.507877826690674
+      Yaw: 4.509680271148682
     Saved: ~
 Window Geometry:
   Displays:
