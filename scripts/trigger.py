@@ -68,4 +68,4 @@ def startNode():
 if __name__ == '__main__':
     rospy.init_node('auto_commands')  
     startNode()
-    print("auto_commands started")
+    rospy.loginfo("auto_commands started")

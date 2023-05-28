@@ -10,7 +10,7 @@ if __name__ == '__main__':
     rospy.init_node("mesh_visualizer")
     rate = rospy.Rate(1)
 
-    rospy.loginfo('Initializing object visualizer')
+    print('Initializing object visualizer')
     rp = rospkg.RosPack()
 
     model_path = rospy.get_param("/model_path")
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
             current_model_count = len(files)
             for marker_id, file in enumerate(files):
-                rospy.loginfo('Loading file: %s', file)
+                print('Loading file: %s', file)
                 marker = Marker()
                 marker.id = marker_id
                 marker.mesh_resource = 'package://caric_mission/models/mbs/' + file
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
             current_bbox_count = len(files)
             for marker_id, file in enumerate(files):
-                rospy.loginfo('Loading file: %s', file)
+                print('Loading file: %s', file)
                 marker = Marker()
                 marker.id = marker_id
                 marker.mesh_resource = 'package://caric_mission/models/mbs/bounding_boxes/' + file
