@@ -15,6 +15,7 @@ if __name__ == '__main__':
 
     model_path = rospy.get_param("/model_path")
     print("model_path ", model_path)
+    model_dir = model_path.split('caric_mission')[-1]
 
     modelMarkerArray = MarkerArray()
     modelMarkerPub = rospy.Publisher('model_viz', MarkerArray, queue_size=1)
@@ -48,7 +49,7 @@ if __name__ == '__main__':
                 print('Loading file: %s', file)
                 marker = Marker()
                 marker.id = marker_id
-                marker.mesh_resource = 'package://caric_mission/models/mbs/' + file
+                marker.mesh_resource = 'package://caric_mission' + model_dir + '/' + file
                 marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
                 marker.type = marker.MESH_RESOURCE
                 marker.header.frame_id = "world"
@@ -56,7 +57,7 @@ if __name__ == '__main__':
                 marker.scale.y = 1.0
                 marker.scale.z = 1.0
                 marker.pose.orientation.w = 1.0
-                marker.color.a = 0.8
+                marker.color.a = 1.0
                 marker.color.r = 0.0
                 marker.color.g = 1.0
                 marker.color.b = 1.0            
@@ -84,7 +85,7 @@ if __name__ == '__main__':
                 print('Loading file: %s', file)
                 marker = Marker()
                 marker.id = marker_id
-                marker.mesh_resource = 'package://caric_mission/models/mbs/bounding_boxes/' + file
+                marker.mesh_resource = 'package://caric_mission' + model_dir + '/bounding_boxes/' + file
                 marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
                 marker.type = marker.MESH_RESOURCE
                 marker.header.frame_id = "world"
@@ -92,7 +93,7 @@ if __name__ == '__main__':
                 marker.scale.y = 1.0
                 marker.scale.z = 1.0
                 marker.pose.orientation.w = 1.0
-                marker.color.a = 0.1
+                marker.color.a = 0.3
                 marker.color.r = 1.0
                 marker.color.g = 0.9
                 marker.color.b = 0.0            
