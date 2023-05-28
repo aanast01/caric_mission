@@ -104,7 +104,7 @@
         <arg name="start_y"           value="8.0" />
 
         <arg name="path_file"         value="$(find caric_mission)/paths/mbs/mbs_path_1.yaml" />
-
+        <arg name="manual_control"    value="false" />
     </include>
 
 

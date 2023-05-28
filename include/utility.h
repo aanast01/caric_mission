@@ -94,7 +94,7 @@
 // #include <sophus/se3.hpp>
 
 // Ceres
-#include <ceres/ceres.h>
+// #include <ceres/ceres.h>
 
 using namespace std;
 using namespace Eigen;
