@@ -13,7 +13,7 @@
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="false" />
+    <arg name="gui"                   default="true" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -68,7 +68,7 @@
 
 
     <!-- Spawning the ground station -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_gcs.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_gcs.launch">
 
         <arg name="namespace"         value="gcs" />
         <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
@@ -86,11 +86,11 @@
         <arg name="cam_rel_to_drone_y"      default="$(arg cam_rel_to_drone_y)" />
         <arg name="cam_rel_to_drone_z"      default="$(arg cam_rel_to_drone_z)" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning one drone -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly1" />
@@ -105,11 +105,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/crane/crane_path_1.yaml" />
         <arg name="manual_control"    value="false" />
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly2" />
@@ -124,11 +124,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/crane/crane_path_2.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly3" />
@@ -143,11 +143,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/crane/crane_path_3.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly4" />
@@ -162,11 +162,11 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/crane/crane_path_4.yaml" />
 
-    </include> -->
+    </include>
 
 
     <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
+    <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly5" />
@@ -181,7 +181,7 @@
 
         <arg name="path_file"         value="$(find caric_mission)/paths/crane/crane_path_5.yaml" />
 
-    </include> -->
+    </include>
 
     <node pkg="rviz" type="rviz" name="rviz_caric" args="-d $(find caric_mission)/rviz/caric_crane.rviz" />
 
