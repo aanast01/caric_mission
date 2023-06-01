@@ -27,7 +27,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: GCSScoredPoints
+    SyncSource: GCSNbrOdom
   - Class: rviz/Help
     Name: Help
 Preferences:
@@ -92,13 +92,13 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: /model_viz
       Name: STLModel
       Namespaces:
-        "": true
+        {}
       Queue Size: 1
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
       Enabled: true
       Marker Topic: /bbox_viz
@@ -463,6 +463,36 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: false
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: score
+          Class: rviz/PointCloud
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 0; 0
+          Max Intensity: 1
+          Min Color: 211; 215; 207
+          Min Intensity: 0
+          Name: GCSScoredPoints
+          Position Transformer: XYZ
+          Queue Size: 1
+          Selectable: true
+          Size (Pixels): 5
+          Size (m): 0.5
+          Style: Boxes
+          Topic: /gcs/score
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: false
+          Value: true
       Enabled: true
       Name: GCS
     - Class: rviz/Group
@@ -725,43 +755,21 @@ Visualization Manager:
           Value: true
       Enabled: false
       Name: F3SLAM
-    - Class: rviz/Marker
+    - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /gcs/score_text
-      Name: GCSScoreReport
+      Marker Topic: /score_at_point_txt
+      Name: ScoreAtPoint
       Namespaces:
         gcs: true
       Queue Size: 1
       Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: score
-      Class: rviz/PointCloud
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
+    - Class: rviz/Marker
       Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 0; 0
-      Max Intensity: 1
-      Min Color: 211; 215; 207
-      Min Intensity: 0
-      Name: GCSScoredPoints
-      Position Transformer: XYZ
+      Marker Topic: /gcs/score_text
+      Name: ScoreReport
+      Namespaces:
+        {}
       Queue Size: 1
-      Selectable: true
-      Size (Pixels): 5
-      Size (m): 0.5
-      Style: Boxes
-      Topic: /gcs/score
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
       Value: true
   Enabled: true
   Global Options:
@@ -791,7 +799,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 121.86181640625
+      Distance: 112.68549346923828
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -799,17 +807,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 45.664424896240234
-        Y: 6.850503444671631
-        Z: 20.300457000732422
+        X: 46.276126861572266
+        Y: 4.838702201843262
+        Z: 31.326932907104492
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.23479682207107544
+      Pitch: 0.19979675114154816
       Target Frame: <Fixed Frame>
-      Yaw: 4.739714622497559
+      Yaw: 4.564713478088379
     Saved: ~
 Window Geometry:
   Displays:
