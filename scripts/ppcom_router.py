@@ -9,6 +9,8 @@ from rotors_comm.msg import PPComTopology
 from importlib import import_module
 from caric_mission.srv import CreatePPComTopic
 
+import random
+import string
 
 # The topology to determine whether topic can be relayed
 ppcomTopo = None
@@ -59,7 +61,6 @@ class PPComAccess:
         return adj
 
 
-
 # Dictionary to relay data from one topic to others
 topic_to_dialogue = {}
 class Dialogue:
@@ -107,7 +108,7 @@ def DataCallback(msg):
     callerid = conn_header['callerid']
     source_node = topic_to_dialogue[topic].callerids_to_source[callerid]
 
-    # print(f"Msg from callerid {conn_header['callerid']}. Topic: {conn_header['topic']}.}")
+    # print(f"Msg from callerid {conn_header['callerid']}. Topic: {conn_header['topic']}. Size: {len(msg._buff)}")
 
     # if callerid not in topic_to_dialogue[topic].callerids_to_source.keys():
     #     return
@@ -168,7 +169,7 @@ def CreatePPComTopicCallback(req):
 
         # If topic has not been created, create it
         if topic not in topic_to_dialogue.keys():
-            topic_to_dialogue[topic] = Dialogue(topic, rospy.Subscriber(topic, msg_class, DataCallback), source, callerid)
+            topic_to_dialogue[topic] = Dialogue(topic, rospy.Subscriber(topic, rospy.msg.AnyMsg, DataCallback), source, callerid)
         else:
             topic_to_dialogue[topic].addSource(source, callerid)
 

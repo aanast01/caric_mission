@@ -35,7 +35,7 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         
         # Send a message
-        txt = rospy.get_name() + f" says hello at time {rospy.Time.now().to_sec()}!"
+        txt = rospy.get_name() + f" says hello at time {rospy.Time.now().to_sec()}. Random Text: {result_str}!"
         print("SENDING: ", txt)
         msg = String(data=txt)
         msg_pub.publish(msg)

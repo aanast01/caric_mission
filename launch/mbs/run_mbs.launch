@@ -68,6 +68,7 @@
 
 
     <!-- Spawning the ground station -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_to_score_report" args="30 -40 0 0 0 0 world score_report"/>
     <include file="$(find caric_mission)/launch/mbs/spawn_gcs.launch">
 
         <arg name="namespace"         value="gcs" />
@@ -81,10 +82,6 @@
         <arg name="x"                 value="-2.0" />
         <arg name="y"                 value="08.0" />
         <arg name="z"                 value="20.0" />
-
-        <arg name="cam_rel_to_drone_x"      default="$(arg cam_rel_to_drone_x)" />
-        <arg name="cam_rel_to_drone_y"      default="$(arg cam_rel_to_drone_y)" />
-        <arg name="cam_rel_to_drone_z"      default="$(arg cam_rel_to_drone_z)" />
 
     </include>
 

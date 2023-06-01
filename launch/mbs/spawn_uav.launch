@@ -102,9 +102,6 @@
                    to="/$(arg namespace)/command/roll_pitch_yawrate_thrust" />
             <remap from="command/trajectory"
                    to="/$(arg namespace)/command/trajectory" />
-            <!-- <remap from="/nominal_path"
-                   to="/$(arg namespace)/command/trajectory" /> -->
-
         </node>
 
         <node name="PID_attitude_controller" pkg="mav_lowlevel_attitude_controller"

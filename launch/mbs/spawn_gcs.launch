@@ -27,10 +27,7 @@
                 ppcom_id:=$(arg ppcom_id)
                 ppcom_config:=$(arg ppcom_config)
                 ppcom_hz:=$(arg ppcom_hz)
-                interest_config:=$(arg interest_config)
-                cam_x:=$(arg cam_rel_to_drone_x)
-                cam_y:=$(arg cam_rel_to_drone_y)
-                cam_z:=$(arg cam_rel_to_drone_z)"
+                interest_config:=$(arg interest_config)"
     />
 
     <node name="spawn_gcs" pkg="gazebo_ros" type="spawn_model"
