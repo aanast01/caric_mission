@@ -27,7 +27,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: F1DetectedIP
+    SyncSource: GCSScoredPoints
   - Class: rviz/Help
     Name: Help
 Preferences:
@@ -725,6 +725,14 @@ Visualization Manager:
           Value: true
       Enabled: false
       Name: F3SLAM
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /gcs/score_text
+      Name: GCSScoreReport
+      Namespaces:
+        gcs: true
+      Queue Size: 1
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: false
       Autocompute Value Bounds:
@@ -732,36 +740,28 @@ Visualization Manager:
         Min Value: -10
         Value: true
       Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 239; 41; 41
+      Channel Name: score
+      Class: rviz/PointCloud
+      Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 0; 0
       Max Intensity: 1
-      Min Color: 0; 126; 255
+      Min Color: 211; 215; 207
       Min Intensity: 0
-      Name: F1DetectedIP
+      Name: GCSScoredPoints
       Position Transformer: XYZ
       Queue Size: 1
-      Selectable: false
-      Size (Pixels): 10
-      Size (m): 1
-      Style: Spheres
-      Topic: /firefly1/detected_interest_points
+      Selectable: true
+      Size (Pixels): 5
+      Size (m): 0.5
+      Style: Boxes
+      Topic: /gcs/score
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
-      Value: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /gcs/score
-      Name: Marker
-      Namespaces:
-        gcs: true
-      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -791,7 +791,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 119.22879791259766
+      Distance: 121.86181640625
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -799,17 +799,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 38.26582717895508
-        Y: 3.894296407699585
-        Z: 21.589553833007812
+        X: 45.664424896240234
+        Y: 6.850503444671631
+        Z: 20.300457000732422
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3247966170310974
+      Pitch: 0.23479682207107544
       Target Frame: <Fixed Frame>
-      Yaw: 4.74971342086792
+      Yaw: 4.739714622497559
     Saved: ~
 Window Geometry:
   Displays:
