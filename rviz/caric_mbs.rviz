@@ -5,9 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LOSCheck1/Namespaces1
+        - /GCS1
         - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
-        - /GCS1/GCSNbrOdom1
-        - /F1SLAM1/FF1NbrOdom1
+        - /F1SLAM1/ServoOdom1/Shape1
       Splitter Ratio: 0.6253369450569153
     Tree Height: 479
   - Class: rviz/Selection
@@ -445,7 +445,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Max Intensity: 5
@@ -462,7 +462,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
@@ -528,8 +528,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 21.83275604248047
-            Min Value: -0.05235515162348747
+            Max Value: 55.35163116455078
+            Min Value: -0.07051973789930344
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -545,7 +545,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 1
+          Size (Pixels): 3
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /firefly1/slf_kf_cloud
@@ -556,8 +556,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 21.73942756652832
-            Min Value: -0.052293628454208374
+            Max Value: 54.90842056274414
+            Min Value: -0.04300634562969208
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -573,7 +573,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 1
+          Size (Pixels): 3
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /firefly1/nbr_kf_cloud
@@ -584,16 +584,16 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 36.54374694824219
-            Min Value: -0.1450653076171875
+            Max Value: 44.404457092285156
+            Min Value: -0.04028543829917908
             Value: true
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: FlatColor
+          Color Transformer: AxisColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -608,7 +608,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -637,7 +637,42 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
-      Enabled: false
+        - Angle Tolerance: 0
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.30000001192092896
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: ServoOdom
+          Position Tolerance: 0
+          Queue Size: 1
+          Shape:
+            Alpha: 1
+            Axes Length: 3
+            Axes Radius: 0.25
+            Color: 255; 25; 0
+            Head Length: 0.30000001192092896
+            Head Radius: 0.10000000149011612
+            Shaft Length: 1
+            Shaft Radius: 0.05000000074505806
+            Value: Axes
+          Topic: /firefly1/servo/odometry
+          Unreliable: false
+          Value: true
+      Enabled: true
       Name: F1SLAM
     - Class: rviz/Group
       Displays:
@@ -765,10 +800,10 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /gcs/score_text
+      Marker Topic: /score_total_txt
       Name: ScoreReport
       Namespaces:
-        {}
+        gcs: true
       Queue Size: 1
       Value: true
   Enabled: true
@@ -799,7 +834,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 112.68549346923828
+      Distance: 114.12602996826172
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -807,17 +842,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 46.276126861572266
-        Y: 4.838702201843262
-        Z: 31.326932907104492
+        X: 43.497440338134766
+        Y: 11.486528396606445
+        Z: 30.80416488647461
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.19979675114154816
+      Pitch: 0.1697959154844284
       Target Frame: <Fixed Frame>
-      Yaw: 4.564713478088379
+      Yaw: 4.424691677093506
     Saved: ~
 Window Geometry:
   Displays:

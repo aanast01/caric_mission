@@ -72,6 +72,7 @@ using namespace message_filters;
 // Extrinsic of the lidar
 // TODO: Make these into rosparams
 myTf<double> tf_B_L(Quaternd::Identity(), Vector3d(0, 0, 0.2));
+myTf<double> tf_S_L(Quaternd::Identity(), Vector3d(0, 0, 0.2));
 int    kf_knn_num = 05.0;
 double kf_min_dis = 02.0;
 double kf_min_ang = 10.0;
@@ -81,7 +82,7 @@ typedef nav_msgs::Odometry OdomMsg;
 typedef nav_msgs::Odometry::ConstPtr OdomMsgPtr;
 typedef sensor_msgs::PointCloud2 CloudMsg;
 typedef sensor_msgs::PointCloud2::ConstPtr CloudMsgPtr;
-typedef sync_policies::ApproximateTime<OdomMsg, CloudMsg> MySyncPolicy;
+typedef sync_policies::ApproximateTime<OdomMsg, OdomMsg, CloudMsg> MySyncPolicy;
 
 // Handles to ROS and Gazebo object
 gazebo::physics::WorldPtr world = NULL;
@@ -99,6 +100,7 @@ vector<bool>    nodeAlive;
 MatrixXd        linkMat;
 
 deque<message_filters::Subscriber<OdomMsg>> odomSub;
+deque<message_filters::Subscriber<OdomMsg>> servoSub;
 deque<message_filters::Subscriber<CloudMsg>> cloudSub;
 deque<Synchronizer<MySyncPolicy>> msgSync;
 
@@ -223,17 +225,21 @@ void UpdateSLAMDatabase(int slfIdx, PointPose pose, CloudXYZIPtr &cloud)
     }
 }
 
-void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, int idx)
+void OdomCloudCallback(const OdomMsgPtr &odomMsg, const OdomMsgPtr &servoMsg, const CloudMsgPtr &cloudMsg, int idx)
 {
     // Do nothing if node is dead
     if (!nodeAlive[idx])
         return;
 
-    double time_diff = (cloudMsg->header.stamp - odomMsg->header.stamp).toSec();
-    if(time_diff > 0.001)
+    // Ignore the data if time sync is larger than 1ms
+    double time_diff_odom_cloud = fabs((cloudMsg->header.stamp - odomMsg->header.stamp).toSec());
+    double time_diff_servo_cloud = fabs((cloudMsg->header.stamp - servoMsg->header.stamp).toSec());
+    if(time_diff_odom_cloud > 0.001 || time_diff_servo_cloud > 0.001 )
     {
-        // printf(KRED "Node %d. Tcloud %.3f, Todom: %.3f\n" RESET,
-        //         idx, cloudMsg->header.stamp.toSec(), odomMsg->header.stamp.toSec());
+        printf(KRED "Node %d. Todom: %.3f. Tservo: %.3f. Tcloud %.3f.\n" RESET,
+                idx, odomMsg->header.stamp.toSec(),
+                     servoMsg->header.stamp.toSec(),
+                     cloudMsg->header.stamp.toSec());
         return;
     }
     // else
@@ -246,7 +252,7 @@ void OdomCloudCallback(const OdomMsgPtr &odomMsg, const CloudMsgPtr &cloudMsg, i
     // Transform lidar into the world frame and publish it for visualization
     CloudXYZIPtr cloud(new CloudXYZI());
     pcl::fromROSMsg(*cloudMsg, *cloud);
-    pcl::transformPointCloud(*cloud, *cloud, (tf_W_B*tf_B_L).cast<float>().tfMat());
+    pcl::transformPointCloud(*cloud, *cloud, (myTf<double>(*servoMsg)*tf_S_L).cast<float>().tfMat());
     Util::publishCloud(cloudInWPub[idx], *cloud, cloudMsg->header.stamp, string("world"));
 
     // Save the key frame and key cloud
@@ -321,11 +327,13 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             //     continue;
 
             string gndtr_topic = "/" + nodeName[i] + "/ground_truth/odometry";
+            string servo_topic = "/" + nodeName[i] + "/servo/odometry";
             string cloud_topic = "/" + nodeName[i] + "/velodyne_points";
             odomSub.emplace_back(*nh_ptr, gndtr_topic, 100);
+            servoSub.emplace_back(*nh_ptr, servo_topic, 100);
             cloudSub.emplace_back(*nh_ptr, cloud_topic, 100);
-            msgSync.emplace_back(MySyncPolicy(10), odomSub[i], cloudSub[i]);
-            msgSync.back().registerCallback(boost::bind(&OdomCloudCallback, _1, _2, i));
+            msgSync.emplace_back(MySyncPolicy(10), odomSub[i], servoSub[i], cloudSub[i]);
+            msgSync.back().registerCallback(boost::bind(&OdomCloudCallback, _1, _2, _3, i));
 
             // Local SLAM database
             kfPose.push_back(CloudPosePtr(new CloudPose()));
@@ -507,12 +515,19 @@ int main(int argc, char **argv)
 
     // Get the parameters
     // Transform from body to lidar
-    vector<double> T_B_L_ = {0.0, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0};
-    nh_ptr->getParam("T_B_L", T_B_L_);
+    vector<double> T_B_L_ = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
     tf_B_L = myTf<double>(Quaternd(T_B_L_[3], T_B_L_[4], T_B_L_[5], T_B_L_[6]),
-                  Vector3d(T_B_L_[0], T_B_L_[1], T_B_L_[2]));
+                          Vector3d(T_B_L_[0], T_B_L_[1], T_B_L_[2]));
     printf("tf_B_L:\n");
     cout << tf_B_L.tfMat() << endl;
+
+    vector<double> T_S_L_ = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
+    nh_ptr->getParam("T_S_L", T_S_L_);
+    tf_S_L = myTf<double>(Quaternd(T_S_L_[3], T_S_L_[4], T_S_L_[5], T_S_L_[6]),
+                          Vector3d(T_S_L_[0], T_S_L_[1], T_S_L_[2]));
+    printf("tf_S_L:\n");
+    cout << tf_S_L.tfMat() << endl;
+
     // SLAM parameters
     nh_ptr->param("kf_knn_num", kf_knn_num);
     nh_ptr->param("kf_min_dis", kf_min_dis);

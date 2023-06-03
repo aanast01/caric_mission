@@ -13,7 +13,7 @@
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="true" />
+    <arg name="gui"                   default="false" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -53,7 +53,7 @@
     <node name="mission_manager" pkg="caric_mission" type="caric_mission_mission_manager_node"
           output="screen" launch-prefix="bash -c 'sleep delay_launch; echo LAUNCHING MISSION MANAGER...; $0 $@'">
           
-          <param name="T_B_L"       type="string" value="0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0"/>
+          <param name="T_B_L"       type="string" value="0.2, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0"/>
           <param name="kf_knn_num"  type="double" value="5"/>
           <param name="kf_min_dis"  type="double" value="2.0"/>
           <param name="kf_min_ang"  type="double" value="10"/>

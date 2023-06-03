@@ -117,6 +117,17 @@
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <!-- <gui fullscreen='0'>
+     <camera name="user_camera">
+        <track_visual>
+          <name>firefly1</name>
+          <static>true</static>
+          <use_model_frame>true</use_model_frame>
+          <xyz>-0.5 0 0.5</xyz>
+          <inherit_yaw>false</inherit_yaw>
+        </track_visual>
+    </camera>
+    </gui> -->
     <model name='mbs'>
       <pose>0 0 0 0 0 0</pose>
       <static>1</static>
