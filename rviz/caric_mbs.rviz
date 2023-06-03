@@ -7,6 +7,7 @@ Panels:
         - /LOSCheck1/Namespaces1
         - /GCS1
         - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
+        - /F1SLAM1
         - /F1SLAM1/ServoOdom1/Shape1
       Splitter Ratio: 0.6253369450569153
     Tree Height: 479
@@ -408,8 +409,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 36.68218231201172
-            Min Value: -0.21262192726135254
+            Max Value: 16.13239860534668
+            Min Value: -0.16864298284053802
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -417,7 +418,7 @@ Visualization Manager:
           Color: 0; 255; 0
           Color Transformer: AxisColor
           Decay Time: 1000
-          Enabled: false
+          Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -432,7 +433,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: false
+          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
@@ -445,7 +446,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: false
+          Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Max Intensity: 5
@@ -456,13 +457,13 @@ Visualization Manager:
           Queue Size: 1
           Selectable: true
           Size (Pixels): 20
-          Size (m): 0.009999999776482582
-          Style: Points
+          Size (m): 1
+          Style: Boxes
           Topic: /gcs/nbr_odom_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: false
+          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
@@ -528,8 +529,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 55.35163116455078
-            Min Value: -0.07051973789930344
+            Max Value: 28.42426300048828
+            Min Value: -0.21766668558120728
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -556,8 +557,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 54.90842056274414
-            Min Value: -0.04300634562969208
+            Max Value: 23.43367576599121
+            Min Value: -0.06412890553474426
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -584,8 +585,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 44.404457092285156
-            Min Value: -0.04028543829917908
+            Max Value: 39.518035888671875
+            Min Value: -0.05447233095765114
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -593,7 +594,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: AxisColor
           Decay Time: 0
-          Enabled: false
+          Enabled: true
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -608,9 +609,9 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: false
+          Value: true
         - Alpha: 1
-          Autocompute Intensity Bounds: true
+          Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
             Max Value: 10
             Min Value: -10
@@ -624,14 +625,16 @@ Visualization Manager:
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
+          Max Intensity: 5
           Min Color: 0; 0; 0
+          Min Intensity: 0
           Name: FF1NbrOdom
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 20
-          Size (m): 0.009999999776482582
-          Style: Points
+          Size (m): 2
+          Style: Spheres
           Topic: /firefly1/nbr_odom_cloud
           Unreliable: false
           Use Fixed Frame: true
@@ -795,7 +798,7 @@ Visualization Manager:
       Marker Topic: /score_at_point_txt
       Name: ScoreAtPoint
       Namespaces:
-        gcs: true
+        {}
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
@@ -834,7 +837,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 114.12602996826172
+      Distance: 139.3605194091797
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -842,17 +845,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 43.497440338134766
-        Y: 11.486528396606445
-        Z: 30.80416488647461
+        X: 38.28333282470703
+        Y: 17.271512985229492
+        Z: 20.73740577697754
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.1697959154844284
+      Pitch: 0.22979606688022614
       Target Frame: <Fixed Frame>
-      Yaw: 4.424691677093506
+      Yaw: 4.5946879386901855
     Saved: ~
 Window Geometry:
   Displays:
