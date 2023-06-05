@@ -13,7 +13,7 @@
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="false" />
+    <arg name="gui"                   default="true" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -53,7 +53,8 @@
     <node name="mission_manager" pkg="caric_mission" type="caric_mission_mission_manager_node"
           output="screen" launch-prefix="bash -c 'sleep delay_launch; echo LAUNCHING MISSION MANAGER...; $0 $@'">
           
-          <param name="T_B_L"       type="string" value="0.2, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0"/>
+          <rosparam param="T_B_S"> [0.2, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0]</rosparam>
+          <rosparam param="T_S_L"> [0.0, 0.0, -0.03585, 1.0, 0.0, 0.0, 0.0]</rosparam>
           <param name="kf_knn_num"  type="double" value="5"/>
           <param name="kf_min_dis"  type="double" value="2.0"/>
           <param name="kf_min_ang"  type="double" value="10"/>
@@ -68,7 +69,8 @@
 
 
     <!-- Spawning the ground station -->
-    <include file="$(find caric_mission)/launch/hangar/spawn_gcs.launch">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_to_score_report" args="30 -40 0 0 0 0 world score_report"/>
+    <include file="$(find caric_mission)/launch/mbs/spawn_gcs.launch">
 
         <arg name="namespace"         value="gcs" />
         <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
@@ -82,19 +84,15 @@
         <arg name="y"                 value="-28" />
         <arg name="z"                 value="5.0" />
 
-        <arg name="cam_rel_to_drone_x"      default="$(arg cam_rel_to_drone_x)" />
-        <arg name="cam_rel_to_drone_y"      default="$(arg cam_rel_to_drone_y)" />
-        <arg name="cam_rel_to_drone_z"      default="$(arg cam_rel_to_drone_z)" />
-
     </include>
 
 
-    <!-- Spawning one drone -->
+    <!-- Spawning an explorer drone -->
     <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly1" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="firefly1" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
@@ -108,80 +106,42 @@
     </include>
 
 
-    <!-- Spawning another drone -->
-    <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
-
-        <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly2" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
-
-        <arg name="ppcom_id"          value="firefly2" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
-        <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
-
-        <arg name="start_x"           value="-17.0" />
-        <arg name="start_y"           value="-30.8" />
-
-        <arg name="path_file"         value="$(find caric_mission)/paths/hangar/hangar_path_2.yaml" />
-
-    </include>
-
-
-    <!-- Spawning another drone -->
+    <!-- Spawning a photographer drone -->
     <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly3" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="firefly3" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
-        <arg name="start_x"           value="9.0" />
-        <arg name="start_y"           value="-31.0" />
+        <arg name="start_x"           value="-17.0" />
+        <arg name="start_y"           value="-33.0" />
 
         <arg name="path_file"         value="$(find caric_mission)/paths/hangar/hangar_path_3.yaml" />
 
     </include>
 
 
-    <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
+    <!-- Spawning another photographer drone -->
+    <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly4" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="firefly4" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
-        <arg name="start_x"           value="0.0" />
-        <arg name="start_y"           value="4.0" />
+        <arg name="start_x"           value="9.0" />
+        <arg name="start_y"           value="-35.0" />
 
         <arg name="path_file"         value="$(find caric_mission)/paths/hangar/hangar_path_4.yaml" />
 
-    </include> -->
-
-
-    <!-- Spawning another drone -->
-    <!-- <include file="$(find caric_mission)/launch/hangar/spawn_uav.launch">
-
-        <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly5" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
-
-        <arg name="ppcom_id"          value="firefly5" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
-        <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
-
-        <arg name="start_x"           value="-2.0" />
-        <arg name="start_y"           value="25.0" />
-
-        <arg name="path_file"         value="$(find caric_mission)/paths/hangar/hangar_path_5.yaml" />
-
-    </include> -->
+    </include>
 
     <node pkg="rviz" type="rviz" name="rviz_caric" args="-d $(find caric_mission)/rviz/caric_hangar.rviz" />
 

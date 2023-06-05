@@ -13,7 +13,7 @@
     <arg name="enable_ground_truth"   default="true" />
     <!-- <arg name="log_file" default="$(arg mav_name)" /> -->
     <arg name="debug"                 default="false" />
-    <arg name="gui"                   default="false" />
+    <arg name="gui"                   default="true" />
     <arg name="paused"                default="false" />
     <arg name="frame_id"              default="odom" />
     <!-- The following line causes gzmsg and gzerr messages to be printed to the console
@@ -87,12 +87,12 @@
     </include>
 
 
-    <!-- Spawning one drone -->
+    <!-- Spawning an explorer drone -->
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly1" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="firefly1" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
@@ -106,12 +106,12 @@
     </include>
 
 
-    <!-- Spawning another drone -->
+    <!-- Spawning another explorer drone -->
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly2" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="firefly2" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
@@ -125,12 +125,12 @@
     </include>
 
 
-    <!-- Spawning another drone -->
+    <!-- Spawning a photographer drone -->
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly3" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="firefly3" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
@@ -144,12 +144,12 @@
     </include>
 
 
-    <!-- Spawning another drone -->
+    <!-- Spawning another photographer drone -->
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly4" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="firefly4" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
@@ -163,12 +163,12 @@
     </include>
 
 
-    <!-- Spawning another drone -->
+    <!-- Spawning another photographer drone -->
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="firefly5" />
-        <arg name="model"             value="$(find rotors_description)/urdf/caric_firefly_base.xacro" />
+        <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="firefly5" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
