@@ -8,7 +8,7 @@
 #  * -------------------------------------------------------------------------- */
 
 import rospy
-from caric_util.msg import BoolStamped
+from rotors_comm.msg import BoolStamped
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32MultiArray
 import time
@@ -30,7 +30,7 @@ class auto_commands:
         self.initialized=False;
         self.pubTrigger = [None for i in range(0,number_of_robots)]        
         for i in range(0,number_of_robots):
-            self.pubTrigger[i]=rospy.Publisher('/firefly'+str(i+1)+'/trigger',BoolStamped,queue_size=1,latch=True)
+            self.pubTrigger[i]=rospy.Publisher('/firefly'+str(i+1)+'/command/trigger',BoolStamped,queue_size=1,latch=True)
 
 
     #In rospy, the callbacks are all of them in separate threads
