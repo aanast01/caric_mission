@@ -409,8 +409,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 52.83395004272461
-            Min Value: -0.06614687293767929
+            Max Value: 30.258548736572266
+            Min Value: -0.1284514218568802
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -529,8 +529,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 52.83395004272461
-            Min Value: -0.06614687293767929
+            Max Value: 27.986225128173828
+            Min Value: -0.15991848707199097
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -557,8 +557,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 46.631919860839844
-            Min Value: -0.08238736540079117
+            Max Value: 30.258548736572266
+            Min Value: -0.1284514218568802
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -585,8 +585,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 11.752348899841309
-            Min Value: -0.10384096950292587
+            Max Value: 52.50807189941406
+            Min Value: -0.07515173405408859
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -798,7 +798,7 @@ Visualization Manager:
       Marker Topic: /score_at_point_txt
       Name: ScoreAtPoint
       Namespaces:
-        gcs: true
+        {}
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
@@ -845,17 +845,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.280003786087036
-        Y: 1.2512476444244385
-        Z: 19.43763542175293
+        X: 9.941964149475098
+        Y: 3.896707057952881
+        Z: 32.04298782348633
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.16979564726352692
+      Pitch: -0.12020435184240341
       Target Frame: <Fixed Frame>
-      Yaw: 1.82468843460083
+      Yaw: 1.8546884059906006
     Saved: ~
 Window Geometry:
   Displays:
