@@ -54,6 +54,8 @@
 #include "tcc/Stop.h"
 #include "utility.h"
 
+#include "boost/filesystem.hpp"
+
 // Printout colors
 #define KNRM "\x1B[0m"
 #define KRED "\x1B[31m"
@@ -68,6 +70,19 @@
 using namespace std;
 using namespace Eigen;
 using namespace message_filters;
+
+string log_dir;
+double mission_duration = 180;
+bool mission_started = false;
+ros::Time mission_start_time;
+
+// Score sub and pub
+ros::Subscriber scoreTextSub;
+ros::Publisher  scoreTextPub;
+
+ros::Subscriber scoreSub;
+std::mutex score_mtx;
+sensor_msgs::PointCloud scoreMsg;
 
 // Extrinsic of the lidar
 // TODO: Make these into rosparams
@@ -175,7 +190,7 @@ void ContactCallback(ConstContactsPtr &_msg)
             {
                 deadNode[node_idx] = true;
                 printf("Node %d, %s (role %s) collides with %s.\n",
-                        node_idx, nodeRole[node_idx].c_str(), nodeName[node_idx].c_str(),
+                        node_idx, nodeName[node_idx].c_str(), nodeRole[node_idx].c_str(),
                         colide_case1 ? col2.c_str() : col1.c_str());
                 
                 for(int k = 0; k < 1; k++)
@@ -374,12 +389,20 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
         Vector3d vel(nodeOdom[i].twist.twist.linear.x,
                      nodeOdom[i].twist.twist.linear.y,
                      nodeOdom[i].twist.twist.linear.z);
-        
+
         if (nodeOdom[i].pose.pose.position.z > 0.1 && vel.norm() > 0.1)
             nodeStatus[i] = "on_air";
 
         if (nodeOdom[i].pose.pose.position.z < 0.1 && vel.norm() < 0.1)
             nodeStatus[i] = "on_ground";
+
+        // Start counting mission if any velocity exceeds 0.05 m/s
+        if (!mission_started && nodeRole[i] != "manager" && nodeStatus[i] == "on_air")
+        {
+            mission_started = true;
+            mission_start_time = ros::Time::now();
+            printf(KYEL "MISSION STARTED\n" RESET);
+        }    
     }
 
     // Publish the message with dead or alive check
@@ -482,7 +505,93 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
 
     vizAid.rosPub.publish(vizAid.marker);
 
+
+    // Shutdown everything when mission time elapses
+    if (mission_started && ((ros::Time::now() - mission_start_time).toSec() > mission_duration))
+    {
+        for(int node_idx = 0; node_idx < Nnodes; node_idx++)
+        {
+            printf("Mission time over. Shutting down node %d, %s (role %s).\n",
+                    node_idx, nodeName[node_idx].c_str(), nodeRole[node_idx].c_str());
+            
+            // Command the drones to fall
+            tcc::Stop stop;
+            stop.request.message = KRED "Collision happens over " + nodeName[node_idx] + ". Control Stopped!" RESET;
+            ros::service::call("/" + nodeName[node_idx] + "/stop", stop);
+
+            // Set the state of the drone as dead
+            nodeAlive[node_idx] = false;
+        }
+    }
+
     // printf("ppcomcb: %f\n", tt_ppcom.Toc());
+}
+
+void ScoreTextCallback(const RosVizMarker::Ptr &msg)
+{
+    RosVizMarker msg_ = *msg;
+
+    double elapsed_time = mission_started ? (ros::Time::now() - mission_start_time).toSec() : 0;
+    string time_report = myprintf("%.3f s / %.3f s", elapsed_time, mission_duration);
+    
+    msg_.text += ". Time: " + time_report;
+
+    if (elapsed_time / mission_duration < 0.5)
+    {
+        msg_.color.r = 0;
+        msg_.color.g = 1;
+        msg_.color.b = 0;
+    }
+    else if (elapsed_time / mission_duration < 0.8)
+    {
+        msg_.color.r = 1;
+        msg_.color.g = 1;
+        msg_.color.b = 0;
+    }
+    else
+    {
+        msg_.color.r = 1;
+        msg_.color.g = 0;
+        msg_.color.b = 1;
+    }
+    
+    scoreTextPub.publish(msg_);
+}
+
+void ScoreCallback(const sensor_msgs::PointCloud::Ptr &msg)
+{
+    std::lock_guard<std::mutex> lock(score_mtx);
+    scoreMsg = *msg;
+}
+
+void WriteScoreLog()
+{
+    std::lock_guard<std::mutex> lock(score_mtx);
+
+    std::ofstream log_file;
+    log_file.open(log_dir + "/score.csv");
+    log_file.precision(std::numeric_limits<double>::digits10 + 1);
+    
+    log_file << "x, y, z, nx, ny, nz, score, idx" << endl;
+
+    printf(KYEL "Logging the score...\n" RESET);
+
+    for(int i = 0; i < scoreMsg.points.size(); i++)
+    {
+        geometry_msgs::Point32 &point = scoreMsg.points[i];
+        
+        log_file << point.x << ", "
+                 << point.y << ", "
+                 << point.z << ", "
+                 << scoreMsg.channels[0].values[i] << ", "
+                 << scoreMsg.channels[1].values[i] << ", "
+                 << scoreMsg.channels[2].values[i] << ", "
+                 << scoreMsg.channels[3].values[i] << ", "
+                 << scoreMsg.channels[4].values[i] << endl;
+    }
+
+    printf(KYEL "Logging the score completed.\n" RESET);
+
 }
 
 /////////////////////////////////////////////////
@@ -511,9 +620,22 @@ int main(int argc, char **argv)
     printf(KGRN "Subscribing to ppcom_topology\n" RESET);
     ppcomDoAPub = nh_ptr->advertise<rotors_comm::PPComTopology>("/gcs/ppcom_topology_doa", 1);
 
+    // Subcribe to the total score status
+    scoreTextSub = nh_ptr->subscribe("/viz_score_totalled", 1, ScoreTextCallback);
+    scoreTextPub = nh_ptr->advertise<RosVizMarker>("/viz_score_totalled_time", 1);
+
+    // Subscribe to the score topic from the gcs
+    scoreSub = nh_ptr->subscribe("/score_eval", 1, ScoreCallback);
+    
     // world = gazebo::physics::get_world("default");
 
     // Get the parameters
+
+    // Mission time
+    nh_ptr->getParam("mission_duration", mission_duration);
+    nh_ptr->getParam("log_dir", log_dir);
+    boost::filesystem::create_directories(log_dir);
+
     // Transform from body to lidar
     vector<double> T_B_S_ = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
     nh_ptr->getParam("T_B_S", T_B_S_);
@@ -571,6 +693,9 @@ int main(int argc, char **argv)
 
     ros::MultiThreadedSpinner spinner(0);
     spinner.spin();
+
+    // Write down the score
+    WriteScoreLog();
 
     // Make sure to shut everything down.
     gazebo::client::shutdown();

@@ -5,9 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LOSCheck1/Namespaces1
-        - /GCS1
         - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
-        - /F1SLAM1
         - /F1SLAM1/ServoOdom1/Shape1
       Splitter Ratio: 0.6253369450569153
     Tree Height: 479
@@ -28,7 +26,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: GCSNbrOdom
+    SyncSource: ""
   - Class: rviz/Help
     Name: Help
 Preferences:
@@ -105,7 +103,7 @@ Visualization Manager:
       Marker Topic: /bbox_viz
       Name: STLBoundingBox
       Namespaces:
-        "": true
+        {}
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
@@ -113,7 +111,7 @@ Visualization Manager:
       Marker Topic: /topology_marker
       Name: LOSCheck
       Namespaces:
-        loop_marker: true
+        {}
       Queue Size: 1
       Value: true
     - Alpha: 1
@@ -367,7 +365,7 @@ Visualization Manager:
           Marker Topic: /jurong/visualize
           Name: CamFOV1
           Namespaces:
-            view_agent_1: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -375,7 +373,7 @@ Visualization Manager:
           Marker Topic: /raffles/visualize
           Name: CamFOV2
           Namespaces:
-            view_agent_1: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -383,7 +381,7 @@ Visualization Manager:
           Marker Topic: /sentosa/visualize
           Name: CamFOV3
           Namespaces:
-            view_agent_1: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -391,7 +389,7 @@ Visualization Manager:
           Marker Topic: /changi/visualize
           Name: CamFOV4
           Namespaces:
-            view_agent_1: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -399,7 +397,7 @@ Visualization Manager:
           Marker Topic: /nanyang/visualize
           Name: CamFOV5
           Namespaces:
-            view_agent_1: true
+            {}
           Queue Size: 100
           Value: true
       Enabled: true
@@ -803,10 +801,10 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /score_total_txt
+      Marker Topic: /viz_score_totalled_time
       Name: ScoreReport
       Namespaces:
-        gcs: true
+        {}
       Queue Size: 1
       Value: true
   Enabled: true

@@ -803,7 +803,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /score_total_txt
+      Marker Topic: /viz_score_totalled_time
       Name: ScoreReport
       Namespaces:
         gcs: true
