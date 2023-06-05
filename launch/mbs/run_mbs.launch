@@ -7,7 +7,7 @@
     <arg name="sim_type"              default="rotors" />
  
     <arg name="world_name"            default="$(find caric_mission)/worlds/mbs.world" />
-    <arg name="interest_config"       default="$(find caric_mission)/models/mbs/mbs.pcd" />
+    <arg name="interest_points"   default="$(find caric_mission)/models/mbs/mbs_interest_points.pcd" />
 
     <arg name="enable_logging"        default="false" />
     <arg name="enable_ground_truth"   default="true" />
@@ -78,7 +78,7 @@
         <arg name="ppcom_id"          value="gcs" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
-        <arg name="interest_config"   value="$(arg interest_config)" />
+        <arg name="interest_points"   value="$(arg interest_points)" />
 
         <arg name="x"                 value="-2.0" />
         <arg name="y"                 value="08.0" />

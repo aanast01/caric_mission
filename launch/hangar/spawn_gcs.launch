@@ -7,7 +7,7 @@
     <arg name="ppcom_id"      default="gcs" />
     <arg name="ppcom_config"  default="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
     <arg name="ppcom_hz"      default="10" />
-    <arg name="interest_config"  default="$(find caric_mission)/models/mbs/mbs.pcd" />
+    <arg name="interest_points"  default="$(find caric_mission)/models/mbs/mbs.pcd" />
     <arg name="cam_rel_to_drone_x"      default="0.3" />
     <arg name="cam_rel_to_drone_y"      default="0.0" />
     <arg name="cam_rel_to_drone_z"      default="-0.2" />
@@ -27,7 +27,7 @@
                 ppcom_id:=$(arg ppcom_id)
                 ppcom_config:=$(arg ppcom_config)
                 ppcom_hz:=$(arg ppcom_hz)
-                interest_config:=$(arg interest_config)
+                interest_points:=$(arg interest_points)
                 cam_x:=$(arg cam_rel_to_drone_x)
                 cam_y:=$(arg cam_rel_to_drone_y)
                 cam_z:=$(arg cam_rel_to_drone_z)"
