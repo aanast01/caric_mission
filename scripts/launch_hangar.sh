@@ -8,28 +8,28 @@ catkin build;
     wait;
     
     (
-        rosservice call /firefly1/traj_gennav/readfile;
-        rosservice call /firefly1/traj_gennav/execute_path;
+        rosservice call /jurong/traj_gennav/readfile;
+        rosservice call /jurong/traj_gennav/execute_path;
     ) &
 
     (
-        rosservice call /firefly2/traj_gennav/readfile;
-        rosservice call /firefly2/traj_gennav/execute_path;
+        rosservice call /raffles/traj_gennav/readfile;
+        rosservice call /raffles/traj_gennav/execute_path;
     ) &
 
     (
-        rosservice call /firefly3/traj_gennav/readfile;
-        rosservice call /firefly3/traj_gennav/execute_path;
+        rosservice call /sentosa/traj_gennav/readfile;
+        rosservice call /sentosa/traj_gennav/execute_path;
     ) &
 
     (
-        rosservice call /firefly4/traj_gennav/readfile;
-        rosservice call /firefly4/traj_gennav/execute_path;
+        rosservice call /changi/traj_gennav/readfile;
+        rosservice call /changi/traj_gennav/execute_path;
     ) &
 
     (
-        rosservice call /firefly5/traj_gennav/readfile;
-        rosservice call /firefly5/traj_gennav/execute_path;
+        rosservice call /nanyang/traj_gennav/readfile;
+        rosservice call /nanyang/traj_gennav/execute_path;
     )
 ) & \
 roslaunch caric_mission run_hangar.launch

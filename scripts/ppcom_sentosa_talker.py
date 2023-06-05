@@ -14,7 +14,7 @@ def PingMessageCallback(msg):
 
 if __name__ == '__main__':
 
-    rospy.init_node('firefly5_talker', anonymous=False)
+    rospy.init_node('sentosa_talker', anonymous=False)
 
     # Wait for service to appear
     rospy.wait_for_service('create_ppcom_topic')
@@ -23,12 +23,12 @@ if __name__ == '__main__':
     create_ppcom_topic = rospy.ServiceProxy('create_ppcom_topic', CreatePPComTopic)
 
     # Register the topic with ppcom router
-    response = create_ppcom_topic('firefly5', ['all'], '/ping_message', 'std_msgs', 'String')
+    response = create_ppcom_topic('sentosa', ['raffles'], '/ping_message', 'std_msgs', 'String')
     print(f"Response {response}")
 
     # Create the publisher
     msg_pub = rospy.Publisher('/ping_message', String, queue_size=1)
-    ping_message_sub = rospy.Subscriber('/ping_message/firefly5', String, PingMessageCallback)
+    ping_message_sub = rospy.Subscriber('/ping_message/sentosa', String, PingMessageCallback)
 
     # Create a rate and loop
     rate = rospy.Rate(1)

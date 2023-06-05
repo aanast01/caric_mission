@@ -91,10 +91,10 @@
     <include file="$(find caric_mission)/launch/crane/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly1" />
+        <arg name="namespace"         value="jurong" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
-        <arg name="ppcom_id"          value="firefly1" />
+        <arg name="ppcom_id"          value="jurong" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
@@ -110,10 +110,10 @@
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly2" />
+        <arg name="namespace"         value="raffles" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
-        <arg name="ppcom_id"          value="firefly2" />
+        <arg name="ppcom_id"          value="raffles" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
@@ -129,10 +129,10 @@
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly3" />
+        <arg name="namespace"         value="sentosa" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
-        <arg name="ppcom_id"          value="firefly3" />
+        <arg name="ppcom_id"          value="sentosa" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
@@ -148,10 +148,10 @@
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly4" />
+        <arg name="namespace"         value="changi" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
-        <arg name="ppcom_id"          value="firefly4" />
+        <arg name="ppcom_id"          value="changi" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
@@ -167,10 +167,10 @@
     <include file="$(find caric_mission)/launch/mbs/spawn_uav.launch">
 
         <arg name="mav_name"          value="firefly" />
-        <arg name="namespace"         value="firefly5" />
+        <arg name="namespace"         value="nanyang" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
-        <arg name="ppcom_id"          value="firefly5" />
+        <arg name="ppcom_id"          value="nanyang" />
         <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 

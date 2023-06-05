@@ -70,8 +70,8 @@ target_link_libraries(${PROJECT_NAME}_mission_manager_node
 
 # Declare the nodes
 catkin_install_python(PROGRAMS scripts/ppcom_router.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-catkin_install_python(PROGRAMS scripts/ppcom_firefly1_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-catkin_install_python(PROGRAMS scripts/ppcom_firefly2_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-catkin_install_python(PROGRAMS scripts/ppcom_firefly3_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-catkin_install_python(PROGRAMS scripts/ppcom_firefly4_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-catkin_install_python(PROGRAMS scripts/ppcom_firefly5_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ppcom_jurong_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ppcom_raffles_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ppcom_sentosa_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ppcom_changi_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ppcom_nanyang_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

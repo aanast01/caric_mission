@@ -202,7 +202,7 @@ Visualization Manager:
             Value: true
           Enabled: true
           Keep: 1
-          Name: Firefly1
+          Name: jurong
           Position Tolerance: 0
           Queue Size: 10
           Shape:
@@ -215,7 +215,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly1/ground_truth/odometry
+          Topic: /jurong/ground_truth/odometry
           Unreliable: false
           Value: true
         - Angle Tolerance: 0
@@ -237,7 +237,7 @@ Visualization Manager:
             Value: true
           Enabled: true
           Keep: 1
-          Name: Firefly2
+          Name: raffles
           Position Tolerance: 0
           Queue Size: 10
           Shape:
@@ -250,7 +250,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly2/ground_truth/odometry
+          Topic: /raffles/ground_truth/odometry
           Unreliable: false
           Value: true
         - Angle Tolerance: 0
@@ -272,7 +272,7 @@ Visualization Manager:
             Value: true
           Enabled: true
           Keep: 1
-          Name: Firefly3
+          Name: sentosa
           Position Tolerance: 0
           Queue Size: 10
           Shape:
@@ -285,7 +285,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly3/ground_truth/odometry
+          Topic: /sentosa/ground_truth/odometry
           Unreliable: false
           Value: true
         - Angle Tolerance: 0
@@ -307,7 +307,7 @@ Visualization Manager:
             Value: true
           Enabled: true
           Keep: 1
-          Name: Firefly4
+          Name: changi
           Position Tolerance: 0
           Queue Size: 10
           Shape:
@@ -320,7 +320,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly4/ground_truth/odometry
+          Topic: /changi/ground_truth/odometry
           Unreliable: false
           Value: true
         - Angle Tolerance: 0
@@ -342,7 +342,7 @@ Visualization Manager:
             Value: true
           Enabled: true
           Keep: 1
-          Name: Firefly5
+          Name: nanyang
           Position Tolerance: 0
           Queue Size: 10
           Shape:
@@ -355,7 +355,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly5/ground_truth/odometry
+          Topic: /nanyang/ground_truth/odometry
           Unreliable: false
           Value: true
       Enabled: true
@@ -364,7 +364,7 @@ Visualization Manager:
       Displays:
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly1/visualize
+          Marker Topic: /jurong/visualize
           Name: CamFOV1
           Namespaces:
             view_agent_1: true
@@ -372,7 +372,7 @@ Visualization Manager:
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly2/visualize
+          Marker Topic: /raffles/visualize
           Name: CamFOV2
           Namespaces:
             view_agent_1: true
@@ -380,7 +380,7 @@ Visualization Manager:
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly3/visualize
+          Marker Topic: /sentosa/visualize
           Name: CamFOV3
           Namespaces:
             view_agent_1: true
@@ -388,7 +388,7 @@ Visualization Manager:
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly4/visualize
+          Marker Topic: /changi/visualize
           Name: CamFOV4
           Namespaces:
             view_agent_1: true
@@ -396,7 +396,7 @@ Visualization Manager:
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly5/visualize
+          Marker Topic: /nanyang/visualize
           Name: CamFOV5
           Namespaces:
             view_agent_1: true
@@ -514,14 +514,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly1/kf_pose
+          Name: /jurong/kf_pose
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 3
           Size (m): 1
           Style: Spheres
-          Topic: /firefly1/kf_pose
+          Topic: /jurong/kf_pose
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -542,14 +542,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly1/kf_cloud
+          Name: /jurong/kf_cloud
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.20000000298023224
           Style: Points
-          Topic: /firefly1/slf_kf_cloud
+          Topic: /jurong/slf_kf_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -570,14 +570,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly1/nbr_kf_cloud
+          Name: /jurong/nbr_kf_cloud
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.20000000298023224
           Style: Points
-          Topic: /firefly1/nbr_kf_cloud
+          Topic: /jurong/nbr_kf_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -598,14 +598,14 @@ Visualization Manager:
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly1/cloud_inW
+          Name: /jurong/cloud_inW
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 5
           Size (m): 0.10000000149011612
           Style: Points
-          Topic: /firefly1/cloud_inW
+          Topic: /jurong/cloud_inW
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -635,7 +635,7 @@ Visualization Manager:
           Size (Pixels): 20
           Size (m): 2
           Style: Spheres
-          Topic: /firefly1/nbr_odom_cloud
+          Topic: /jurong/nbr_odom_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -672,7 +672,7 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly1/servo/odometry
+          Topic: /jurong/servo/odometry
           Unreliable: false
           Value: true
       Enabled: true
@@ -695,14 +695,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly3/kf_pose
+          Name: /sentosa/kf_pose
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 3
           Size (m): 1
           Style: Spheres
-          Topic: /firefly3/kf_pose
+          Topic: /sentosa/kf_pose
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -723,14 +723,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly3/kf_cloud
+          Name: /sentosa/kf_cloud
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 2
           Size (m): 0.20000000298023224
           Style: Points
-          Topic: /firefly3/slf_kf_cloud
+          Topic: /sentosa/slf_kf_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -751,14 +751,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly3/nbr_kf_cloud
+          Name: /sentosa/nbr_kf_cloud
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 2
           Size (m): 0.20000000298023224
           Style: Points
-          Topic: /firefly3/nbr_kf_cloud
+          Topic: /sentosa/nbr_kf_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -779,14 +779,14 @@ Visualization Manager:
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: /firefly3/cloud_inW
+          Name: /sentosa/cloud_inW
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
           Size (Pixels): 5
           Size (m): 0.10000000149011612
           Style: Points
-          Topic: /firefly3/cloud_inW
+          Topic: /sentosa/cloud_inW
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true

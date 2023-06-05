@@ -4,12 +4,12 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /firefly11/Odom1/Shape1
-        - /firefly11/Odom1/Covariance1
-        - /firefly21/Odom1/Shape1
-        - /firefly31/Odom1/Shape1
-        - /firefly41/Odom1/Shape1
-        - /firefly51/Odom1/Shape1
+        - /jurong1/Odom1/Shape1
+        - /jurong1/Odom1/Covariance1
+        - /raffles1/Odom1/Shape1
+        - /sentosa1/Odom1/Shape1
+        - /changi1/Odom1/Shape1
+        - /nanyang1/Odom1/Shape1
       Splitter Ratio: 0.5614035129547119
     Tree Height: 360
   - Class: rviz/Selection
@@ -138,19 +138,19 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly1/ground_truth/odometry
+          Topic: /jurong/ground_truth/odometry
           Unreliable: false
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly1/los_marker
+          Marker Topic: /jurong/los_marker
           Name: LOS_NBR
           Namespaces:
             {}
           Queue Size: 1
           Value: true
       Enabled: true
-      Name: firefly1
+      Name: jurong
     - Class: rviz/Group
       Displays:
         - Angle Tolerance: 0
@@ -185,19 +185,19 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly2/ground_truth/odometry
+          Topic: /raffles/ground_truth/odometry
           Unreliable: false
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly2/los_marker
+          Marker Topic: /raffles/los_marker
           Name: LOS_NBR
           Namespaces:
             {}
           Queue Size: 1
           Value: true
       Enabled: true
-      Name: firefly2
+      Name: raffles
     - Class: rviz/Group
       Displays:
         - Angle Tolerance: 0
@@ -232,19 +232,19 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly3/ground_truth/odometry
+          Topic: /sentosa/ground_truth/odometry
           Unreliable: false
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly3/los_marker
+          Marker Topic: /sentosa/los_marker
           Name: LOS_NBR
           Namespaces:
             {}
           Queue Size: 1
           Value: true
       Enabled: true
-      Name: firefly3
+      Name: sentosa
     - Class: rviz/Group
       Displays:
         - Angle Tolerance: 0
@@ -279,19 +279,19 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly4/ground_truth/odometry
+          Topic: /changi/ground_truth/odometry
           Unreliable: false
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly4/los_marker
+          Marker Topic: /changi/los_marker
           Name: LOS_NBR
           Namespaces:
             {}
           Queue Size: 1
           Value: true
       Enabled: true
-      Name: firefly4
+      Name: changi
     - Class: rviz/Group
       Displays:
         - Angle Tolerance: 0
@@ -326,19 +326,19 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /firefly5/ground_truth/odometry
+          Topic: /nanyang/ground_truth/odometry
           Unreliable: false
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /firefly5/los_marker
+          Marker Topic: /nanyang/los_marker
           Name: LOS_NBR
           Namespaces:
             {}
           Queue Size: 1
           Value: true
       Enabled: true
-      Name: firefly5
+      Name: nanyang
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
