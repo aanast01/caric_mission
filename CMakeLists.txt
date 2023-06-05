@@ -22,7 +22,13 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(Eigen3 REQUIRED)
-find_package(gazebo REQUIRED)
+
+if("$ENV{ROS_DISTRO}" STREQUAL "melodic")
+  find_package(gazebo QUIET PATHS /usr/include/gazebo-11)
+else()
+  find_package(gazebo REQUIRED)
+endif()
+
 find_package(PCL REQUIRED)
 
 ## Generate services in the 'srv' folder
