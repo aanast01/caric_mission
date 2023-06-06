@@ -23,10 +23,9 @@
     <!-- Frequency to check the line of sight raytracing -->
     <arg name="ppcom_hz"              default="50"/>
 
-    <!-- camera position relative to drone body -->
-    <arg name="cam_rel_to_drone_x"      default="0.3" />
-    <arg name="cam_rel_to_drone_y"      default="0.0" />
-    <arg name="cam_rel_to_drone_z"      default="-0.2" />
+    <!-- The deployment coordinates -->
+    <!--  -->
+
 
     <!-- Launch the Gazebo World -->
     <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />
