@@ -22,7 +22,7 @@
 
     <!-- Frequency to check the line of sight raytracing -->
     <arg name="ppcom_hz"              default="50"/>
-
+    <param name="/use_sim_time"       value="true"/>
 
     <!-- Launch the Gazebo World -->
     <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(find caric_mission)/models" />

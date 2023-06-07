@@ -25,6 +25,7 @@
 
     <!-- The deployment coordinates -->
     <!--  -->
+    <param name="/use_sim_time"       value="true"/>
 
 
     <!-- Launch the Gazebo World -->
