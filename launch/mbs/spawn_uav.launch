@@ -32,6 +32,7 @@
     <!-- Path file -->
     <arg name="path_file"             default="$(find traj_gennav)/paths/path.yaml" />
     <arg name="manual_control"        default="false" />
+    <arg name="role"                  default="$(arg role)" />
 
     <!-- <env name="GAZEBO_MODEL_PATH"     value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models" />
     <env name="GAZEBO_RESOURCE_PATH"  value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models" />
@@ -95,6 +96,7 @@
             <param name="sim_type"              type="string"  value="$(arg sim_type)" />
             <param name="mpc_sim"               type="bool"    value="false" />
             <param name="enable_thrust_control" type="bool"    value="$(arg enable_thrust_control)" />
+            <rosparam file="$(find tcc)/param/param_$(arg role).yaml" />
 
             <remap from="vins_estimator/odometry"
                    to="/$(arg namespace)/$(arg odom_topic)" />
@@ -108,7 +110,7 @@
               type="mav_pid_attitude_controller_node" respawn="true" clear_params="true" output="screen"
               launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
             
-            <rosparam file="$(find mav_lowlevel_attitude_controller)/resources/PID_attitude_$(arg mav_name).yaml" />
+            <rosparam file="$(find mav_lowlevel_attitude_controller)/resources/PID_attitude_$(arg role).yaml" />
             <remap from="odometry" to="/$(arg namespace)/$(arg odom_topic)" />
 
         </node>

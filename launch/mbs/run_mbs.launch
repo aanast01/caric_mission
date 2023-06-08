@@ -90,6 +90,7 @@
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="jurong" />
+        <arg name="role"              value="explorer" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="jurong" />
@@ -109,6 +110,7 @@
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="raffles" />
+        <arg name="role"              value="explorer" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="raffles" />
@@ -128,6 +130,7 @@
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="sentosa" />
+        <arg name="role"              value="photographer" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="sentosa" />
@@ -147,6 +150,7 @@
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="changi" />
+        <arg name="role"              value="photographer" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="changi" />
@@ -166,6 +170,7 @@
 
         <arg name="mav_name"          value="firefly" />
         <arg name="namespace"         value="nanyang" />
+        <arg name="role"              value="photographer" />
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="nanyang" />
