@@ -523,35 +523,8 @@ struct myTf
 
 typedef myTf<> mytf;
 
-// CloudXYZI toCloudXYZI(CloudXYZIT &inCloud)
-// {
-//     int cloudSize = inCloud.size();
-//     CloudXYZI outCloud; outCloud.resize(cloudSize);
-    
-//     #pragma omp parallel for num_threads(omp_get_max_threads())
-//     for(int i = 0; i < cloudSize; i++)
-//     {
-//         outCloud.points[i].x = inCloud.points[i].x;
-//         outCloud.points[i].y = inCloud.points[i].y;
-//         outCloud.points[i].z = inCloud.points[i].z;
-//         outCloud.points[i].intensity = inCloud.points[i].intensity;
-//     }
-
-//     return outCloud;
-// }
-
 namespace Util
 {
-    // void MergeVector(vector<int> &vecA, vector<int> &vecB)
-    // {
-    //     std::sort(vecA.begin(), vecA.end());
-    //     std::sort(vecB.begin(), vecB.end());
-    //     vector<int> vecTemp = vector<int>(vecA.size() + vecB.size());
-    //     vector<int>::iterator it = std::set_union(vecA.begin(), vecA.end(), vecB.begin(), vecB.end(), vecTemp.begin());
-    //     vecTemp.resize(it - vecTemp.begin());
-    //     vecA = vecTemp;
-    // }
-
     template <typename PointType>
     sensor_msgs::PointCloud2 publishCloud(ros::Publisher &thisPub,
                                           pcl::PointCloud<PointType> &thisCloud,
@@ -824,42 +797,6 @@ namespace Util
         return Quaterniond(YPR2Rot(y, p, r));
     }
 
-    // Finding the roll and pitch from gravity reading.
-    Eigen::Matrix3d grav2Rot(const Eigen::Vector3d &g)
-    {
-        Eigen::Matrix3d R0;
-        Eigen::Vector3d ng1 = g.normalized();
-        Eigen::Vector3d ng2{0, 0, 1.0};
-        R0 = Eigen::Quaterniond::FromTwoVectors(ng1, ng2).toRotationMatrix();
-        double yaw = Util::Rot2YPR(R0).x();
-        R0 = Util::YPR2Rot(Eigen::Vector3d(-yaw, 0, 0)) * R0;
-        // R0 = Util::ypr2R(Eigen::Vector3d{-90, 0, 0}) * R0;
-        return R0;
-
-        // // Get z axis, which alines with -g (z_in_G=0,0,1)
-        // Eigen::Vector3d z_axis = g / g.norm();
-
-        // // Create an x_axis
-        // Eigen::Vector3d e_1(1, 0, 0);
-
-        // // Make x_axis perpendicular to z
-        // Eigen::Vector3d x_axis = e_1 - z_axis * z_axis.transpose() * e_1;
-        // x_axis = x_axis / x_axis.norm();
-
-        // // Get z from the cross product of these two
-        // Eigen::Matrix<double, 3, 1> y_axis = Util::skewSymmetric(z_axis) * x_axis;
-
-        // // From these axes get rotation
-        // Eigen::Matrix<double, 3, 3> Ro;
-        // Ro.block(0, 0, 3, 1) = x_axis;
-        // Ro.block(0, 1, 3, 1) = y_axis;
-        // Ro.block(0, 2, 3, 1) = z_axis;
-
-        // // Eigen::Quaterniond q0(Ro);
-        // // q0.normalize();
-        // return Ro;
-    }
-
     Vector3d transform_pointVec(const mytf &tf, const PointXYZI &pi)
     {
         Vector3d bodyPoint = tf.rot * Vector3d(pi.x, pi.y, pi.z) + tf.pos;
@@ -962,104 +899,5 @@ std::string myprintf(const std::string& format, ...)
     
     return string(vec.begin(), vec.end() - 1);
 }
-
-// bool file_exist(const std::string& name)
-// {
-//   struct stat buffer;   
-//   return (stat (name.c_str(), &buffer) == 0); 
-// }
-
-// inline vector<string> check_files(const string &pattern)
-// {
-//     glob_t glob_result;
-//     glob(pattern.c_str(), GLOB_TILDE, NULL, &glob_result);
-//     vector<string> files;
-//     for (unsigned int i = 0; i < glob_result.gl_pathc; ++i)
-//     {
-//         files.push_back(string(glob_result.gl_pathv[i]));
-//     }
-//     globfree(&glob_result);
-//     return files;
-// }
-
-// // Load deliminated file to matrix with unknown size
-// template <typename Scalar=double, int RowSize=Dynamic, int ColSize=Dynamic>
-// Matrix<Scalar, RowSize, ColSize> load_dlm(const std::string &path, string dlm, int r_start = 0, int col_start = 0)
-// {
-//     std::ifstream indata;
-//     indata.open(path);
-//     std::string line;
-//     std::vector<double> values;
-//     int row_idx = -1;
-//     int rows = 0;
-//     while (std::getline(indata, line))
-//     {
-//         row_idx++;
-//         if (row_idx < r_start)
-//             continue; 
-
-//         std::stringstream lineStream(line);
-//         std::string cell;
-//         int col_idx = -1;
-//         while (std::getline(lineStream, cell, dlm[0]))
-//         {
-//             if(cell == dlm || cell.size() == 0)
-//                 continue;
-                
-//             col_idx++;
-//             if (col_idx < col_start)
-//                 continue;
-
-//             values.push_back(std::stod(cell));
-//         }
-
-//         rows++;
-
-//     }
-
-//     return Map<const Matrix<Scalar, RowSize, ColSize, RowMajor>>(values.data(), rows, values.size() / rows);
-// }
-
-// string zeroPaddedString(int num, int max)
-// {
-//     int max_digit = 0;
-//     int num_digit = 0;
-
-//     while(true)
-//     {
-//         if (num == 0)
-//         {
-//             num_digit = 1;
-//             break;
-//         }
-        
-//         if (pow(10, num_digit) > num)
-//             break;
-//         else
-//             num_digit++;
-//     }
-
-//     while(true)
-//     {
-//         if (max == 0)
-//         {
-//             max_digit = 1;
-//             break;
-//         }
-        
-//         if (pow(10, max_digit) > max)
-//             break;
-//         else
-//             max_digit++;
-//     }
-
-//     int padded_zero = max_digit - num_digit;
-
-//     string num_str;
-//     for (int i = 0; i < padded_zero; i++)
-//         num_str += "0";
-
-//     return (num_str + std::to_string(num));
-// }
 
 #endif

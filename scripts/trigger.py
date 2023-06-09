@@ -17,41 +17,36 @@ import random
 import numpy as np
 from numpy import linalg as LA
 
-odom_topic_name = 'unity/odom';
+odom_topic_name = 'unity/odom'
 
-number_of_robots = 3;
+number_of_robots = 3
 
 class auto_commands:
 
 
-
     def __init__(self):
 
-        self.initialized=False;
+        self.initialized=False
         self.pubTrigger = [None for i in range(0,number_of_robots)]        
         for i in range(0,number_of_robots):
             self.pubTrigger[i]=rospy.Publisher('/firefly'+str(i+1)+'/command/trigger',BoolStamped,queue_size=1,latch=True)
 
-
     #In rospy, the callbacks are all of them in separate threads
     def odomCB(self, data, args):
-        defg=1;
+        defg=1
 
     def logCB(self, data):
-        abc=1;
+        abc=1
 
     def triggerCB(self, timer):
         # idx = args 
-        msg = BoolStamped();
+        msg = BoolStamped()
         msg.header.frame_id="world"
-        msg.header.stamp = rospy.get_rostime();
-        msg.data = True;        
-        self.pubTrigger[0].publish(msg);
-        self.pubTrigger[1].publish(msg);
-        self.pubTrigger[2].publish(msg);
-
- 
-
+        msg.header.stamp = rospy.get_rostime()
+        msg.data = True        
+        self.pubTrigger[0].publish(msg)
+        self.pubTrigger[1].publish(msg)
+        self.pubTrigger[2].publish(msg)
 
                   
 def startNode():
