@@ -214,10 +214,10 @@ if __name__ == '__main__':
     print("ppcom_router started!")
 
     # Wait for first ppcom message to arrive to initialize the network
-    ppcomTopo = PPComAccess(rospy.wait_for_message("/gcs/ppcom_topology", PPComTopology))
+    ppcomTopo = PPComAccess(rospy.wait_for_message("/ppcom_topology", PPComTopology))
 
     # Subscribe to the ppcom topo
-    rospy.Subscriber("/gcs/ppcom_topology_doa", PPComTopology, TopologyCallback)
+    rospy.Subscriber("/ppcom_topology_doa", PPComTopology, TopologyCallback)
     
     # Advertise the ppcom topic creator
     rospy.Service('create_ppcom_topic', CreatePPComTopic, CreatePPComTopicCallback)

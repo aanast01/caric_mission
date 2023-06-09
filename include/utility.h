@@ -184,19 +184,19 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(PointTQXYZI,
                                  (float,  qw, qw))
 struct PointOdom
 {
-    PCL_ADD_POINT4D
+    PCL_ADD_POINT4D                 // X Y Z position
     PCL_ADD_INTENSITY;              // preferred way of adding a XYZ+padding
     double t;
-    float  qx;
-    float  qy;
-    float  qz;
-    float  qw;
-    float  vx;
-    float  vy;
-    float  vz;
-    float  ax;
-    float  ay;
-    float  az;
+    float  qx;                      // Quaternion x
+    float  qy;                      // Quaternion y
+    float  qz;                      // Quaternion z
+    float  qw;                      // Quaternion w
+    float  vx;                      // Linear Velocity x
+    float  vy;                      // Linear Velocity y
+    float  vz;                      // Linear Velocity z
+    float  wx;                      // Angular Velocity x
+    float  wy;                      // Angular Velocity y
+    float  wz;                      // Angular Velocity z
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW // make sure our new allocators are aligned
 } EIGEN_ALIGN16;                    // enforce SSE padding for correct memory alignment
 POINT_CLOUD_REGISTER_POINT_STRUCT(PointOdom,
@@ -210,9 +210,9 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(PointOdom,
                                  (float,  vx, vx)
                                  (float,  vy, vy)
                                  (float,  vz, vz)
-                                 (float,  ax, aw)
-                                 (float,  ay, ax)
-                                 (float,  az, ay))
+                                 (float,  wx, wx)
+                                 (float,  wy, wy)
+                                 (float,  wz, wz))
 
 struct PointXYZIT
 {

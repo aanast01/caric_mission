@@ -5,9 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LOSCheck1/Namespaces1
-        - /GCS1
         - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
-        - /F1SLAM1
         - /F1SLAM1/ServoOdom1/Shape1
       Splitter Ratio: 0.6253369450569153
     Tree Height: 479
@@ -409,8 +407,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 30.258548736572266
-            Min Value: -0.1284514218568802
+            Max Value: 57.44975280761719
+            Min Value: -0.028636958450078964
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -529,8 +527,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 27.986225128173828
-            Min Value: -0.15991848707199097
+            Max Value: 49.16424560546875
+            Min Value: -0.005263805389404297
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -557,8 +555,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 30.258548736572266
-            Min Value: -0.1284514218568802
+            Max Value: 73.79535675048828
+            Min Value: -0.08817650377750397
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -566,7 +564,7 @@ Visualization Manager:
           Color: 237; 212; 0
           Color Transformer: AxisColor
           Decay Time: 1000
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -581,12 +579,12 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 52.50807189941406
-            Min Value: -0.07515173405408859
+            Max Value: 52.70682907104492
+            Min Value: -0.055557966232299805
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -594,7 +592,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: AxisColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: true
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -609,7 +607,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
@@ -798,7 +796,7 @@ Visualization Manager:
       Marker Topic: /score_at_point_txt
       Name: ScoreAtPoint
       Namespaces:
-        {}
+        gcs: true
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
