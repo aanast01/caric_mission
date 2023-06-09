@@ -186,7 +186,7 @@ void ContactCallback(ConstContactsPtr &_msg)
             // printf("Collision %s <-> %s. case1 %d. case2: %d. status: %s. %d\n",
             //         col1.c_str(), col2.c_str(), colide_case1, colide_case2, nodeStatus[node_idx].c_str(), on_air);
 
-            if((colide_case1 || colide_case2) && on_air)
+            if((colide_case1 || colide_case2) && on_air && nodeAlive[node_idx])
             {
                 deadNode[node_idx] = true;
                 printf("Node %d, %s (role %s) collides with %s.\n",
@@ -443,15 +443,15 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             odom.qz = nodeOdom[j].pose.pose.orientation.z;
             odom.qw = nodeOdom[j].pose.pose.orientation.w;
 
-            // Velocity
+            // Linear Velocity
             odom.vx = nodeOdom[j].twist.twist.linear.x;
             odom.vy = nodeOdom[j].twist.twist.linear.y;
             odom.vz = nodeOdom[j].twist.twist.linear.z;
 
-            // Acceleration
-            odom.ax = nodeOdom[j].twist.twist.angular.x;
-            odom.ay = nodeOdom[j].twist.twist.angular.y;
-            odom.az = nodeOdom[j].twist.twist.angular.z;
+            // Angular Velocity
+            odom.wx = nodeOdom[j].twist.twist.angular.x;
+            odom.wy = nodeOdom[j].twist.twist.angular.y;
+            odom.wz = nodeOdom[j].twist.twist.angular.z;
 
             nbrOdom->push_back(odom);
         }
@@ -511,8 +511,9 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
     {
         for(int node_idx = 0; node_idx < Nnodes; node_idx++)
         {
-            printf("Mission time over. Shutting down node %d, %s (role %s).\n",
-                    node_idx, nodeName[node_idx].c_str(), nodeRole[node_idx].c_str());
+            if (nodeAlive[node_idx])
+                printf("Mission time over. Shutting down node %d, %s (role %s).\n",
+                        node_idx, nodeName[node_idx].c_str(), nodeRole[node_idx].c_str());
             
             // Command the drones to fall
             tcc::Stop stop;
@@ -614,11 +615,11 @@ int main(int argc, char **argv)
 
     // Subscribe to the ppcom topology
     printf(KGRN "Subscribing to ppcom_topology\n" RESET);
-    ros::Subscriber ppcomSub = nh_ptr->subscribe("/gcs/ppcom_topology", 1, PPComCallback);
+    ros::Subscriber ppcomSub = nh_ptr->subscribe("/ppcom_topology", 1, PPComCallback);
 
     // Advertise a ppcom topology with dead or alive status
     printf(KGRN "Subscribing to ppcom_topology\n" RESET);
-    ppcomDoAPub = nh_ptr->advertise<rotors_comm::PPComTopology>("/gcs/ppcom_topology_doa", 1);
+    ppcomDoAPub = nh_ptr->advertise<rotors_comm::PPComTopology>("/ppcom_topology_doa", 1);
 
     // Subcribe to the total score status
     scoreTextSub = nh_ptr->subscribe("/viz_score_totalled", 1, ScoreTextCallback);
