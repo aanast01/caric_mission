@@ -2,7 +2,7 @@
 coordinate_type:              'enu'
 path_mode:                    'polynomial'
 intermediate_poses:           true
-intermediate_pose_separation: 5.0
+intermediate_pose_separation: 2.0
 reference_speed:              5.0
 reference_acceleration:       5.0
 takeoff_height:               1.0
