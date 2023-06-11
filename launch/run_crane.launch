@@ -52,7 +52,7 @@
           
           <param name="mission_duration" type="double" value="180.0"/>
           <param name="log_dir"          type="string" value="$(find caric_mission)/logs/crane/"/>
-          <rosparam param="T_B_S">   [0.2, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0]</rosparam>
+          <rosparam param="T_B_S">   [0.0, 0.0, 0.2, 1.0, 0.0, 0.0, 0.0]</rosparam>
           <rosparam param="T_S_L">   [0.0, 0.0, -0.03585, 1.0, 0.0, 0.0, 0.0]</rosparam>
           <param name="kf_knn_num"   type="double" value="5"/>
           <param name="kf_min_dis"   type="double" value="2.0"/>
