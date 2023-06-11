@@ -5,11 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LOSCheck1/Namespaces1
+        - /GCS1
         - /GCS1/nbr_kf_cloud1/Autocompute Value Bounds1
-        - /F1SLAM1
-        - /F1SLAM1//jurong/kf_cloud1
         - /F1SLAM1/ServoOdom1/Shape1
-      Splitter Ratio: 0.6253369450569153
+      Splitter Ratio: 0.6361185908317566
     Tree Height: 479
   - Class: rviz/Selection
     Name: Selection
@@ -72,7 +71,7 @@ Visualization Manager:
       Buffer Length: 10
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: true
+      Enabled: false
       Head Diameter: 0.30000001192092896
       Head Length: 0.20000000298023224
       Length: 0.30000001192092896
@@ -91,7 +90,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic: /nominal_path
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
       Enabled: false
       Marker Topic: /model_viz
@@ -358,7 +357,7 @@ Visualization Manager:
           Topic: /nanyang/ground_truth/odometry
           Unreliable: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Odom
     - Class: rviz/Group
       Displays:
@@ -409,8 +408,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 55.3401985168457
-            Min Value: -0.14668959379196167
+            Max Value: 41.05881118774414
+            Min Value: 15.730985641479492
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -446,7 +445,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Max Intensity: 5
@@ -463,7 +462,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
@@ -494,6 +493,34 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: false
           Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 252; 175; 62
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: GCSBoundingBoxVertices
+          Position Transformer: XYZ
+          Queue Size: 1
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 1
+          Style: Spheres
+          Topic: /gcs/bounding_box_vertices
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
       Enabled: true
       Name: GCS
     - Class: rviz/Group
@@ -510,7 +537,7 @@ Visualization Manager:
           Color: 0; 255; 0
           Color Transformer: FlatColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -525,12 +552,12 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 55.3401985168457
-            Min Value: -0.14668959379196167
+            Max Value: 41.05881118774414
+            Min Value: 15.730985641479492
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -557,8 +584,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 53.82155227661133
-            Min Value: 27.233890533447266
+            Max Value: 53.85486602783203
+            Min Value: -0.014530420303344727
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -574,7 +601,7 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 1
           Selectable: true
-          Size (Pixels): 3
+          Size (Pixels): 1
           Size (m): 0.20000000298023224
           Style: Points
           Topic: /jurong/nbr_kf_cloud
@@ -585,8 +612,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 54.73017501831055
-            Min Value: -0.1629546880722046
+            Max Value: 37.167362213134766
+            Min Value: -0.16069364547729492
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -622,7 +649,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Max Intensity: 5
@@ -639,7 +666,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Angle Tolerance: 0
           Class: rviz/Odometry
           Covariance:
@@ -657,7 +684,7 @@ Visualization Manager:
               Scale: 1
               Value: true
             Value: true
-          Enabled: true
+          Enabled: false
           Keep: 1
           Name: ServoOdom
           Position Tolerance: 0
@@ -674,7 +701,7 @@ Visualization Manager:
             Value: Axes
           Topic: /jurong/servo/odometry
           Unreliable: false
-          Value: true
+          Value: false
       Enabled: true
       Name: F1SLAM
     - Class: rviz/Group
@@ -809,6 +836,58 @@ Visualization Manager:
         gcs: true
       Queue Size: 1
       Value: true
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /gcs/drone_mesh
+          Name: GCSMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /jurong/drone_mesh
+          Name: JurongMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /raffles/drone_mesh
+          Name: RafflesMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /sentosa/drone_mesh
+          Name: SentosaMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /changi/drone_mesh
+          Name: ChangiMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /nanyang/drone_mesh
+          Name: NanyangMesh
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: DroneMesh
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -837,7 +916,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 135.0096435546875
+      Distance: 149.98699951171875
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -845,17 +924,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 40.48979187011719
-        Y: 15.329167366027832
-        Z: 16.592994689941406
+        X: 42.26484680175781
+        Y: 22.361169815063477
+        Z: 21.285654067993164
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3197961747646332
+      Pitch: 0.1847962588071823
       Target Frame: <Fixed Frame>
-      Yaw: 4.674694061279297
+      Yaw: 4.659691333770752
     Saved: ~
 Window Geometry:
   Displays:

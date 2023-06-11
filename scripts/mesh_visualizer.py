@@ -1,104 +1,217 @@
 #! /usr/bin/env python
 import os
+import yaml
 import numpy as np
+
 import rospy
-import rospkg
+from sensor_msgs.msg import PointCloud
+from geometry_msgs.msg import Point32
+from nav_msgs.msg import Odometry as OdomMsg
 from visualization_msgs.msg import MarkerArray, Marker
+
+fleet = {'gcs'     : 'gcs',
+         'jurong'  : 'explorer',
+         'raffles' : 'explorer',
+         'sentosa' : 'photographer',
+         'changi'  : 'photographer',
+         'nanyang' : 'photographer'}
+
+class MeshVisualizer:
+
+    def __init__(self):
+
+        print('Initializing mesh visualizer')
+        
+        # Path to the building mesh models
+        self.model_path = rospy.get_param("/model_path")
+        self.model_dir = self.model_path.split('caric_mission')[-1]
+        print("model_path: ", self.model_path)
+
+        # Path to the bounding boxes
+        self.bbox_path = rospy.get_param("/bounding_box_path")
+        print("bounding_box_path: ", self.bbox_path)
+
+        self.modelMarkerPub = rospy.Publisher('model_viz', MarkerArray, queue_size=1)
+        self.bboxMarkerPub  = rospy.Publisher('bbox_viz', MarkerArray, queue_size=1)       
+
+        self.current_structure_count = None
+        self.current_bbox_count  = None
+        
+        # Create a timer to update the mesh at 1s
+        rospy.Timer(rospy.Duration(5.0), self.update_structure_mesh)
+        rospy.Timer(rospy.Duration(5.0), self.update_bbox_mesh)
+
+        # Create the pointcloud 
+        self.bb_cloud = PointCloud()
+        self.bb_cloud.header.frame_id = "world"
+        
+        boxes = yaml.safe_load(open(self.bbox_path + "/box_description.yaml", "r"))
+        for box in boxes:
+            
+            center = np.array(boxes[box]['center'])
+            size   = np.array(boxes[box]['size'])
+            pose   = np.array(boxes[box]['orientation']).reshape(4, 4)
+
+            print("box name: ",   center)
+            print("box size: ",   size)
+            print("box orie: \n", pose)
+
+            v = self.get_bounding_box_vertices(center, size, pose)
+
+            for i in range(0, v.shape[0]):
+                vertex = Point32()
+                vertex.x = v[i, 0]
+                vertex.y = v[i, 1]
+                vertex.z = v[i, 2]
+                self.bb_cloud.points.append(vertex)    
+
+        # Create the publisher for the bounding boxes
+        self.bbPub = rospy.Publisher('/gcs/bounding_box_vertices', PointCloud, queue_size=1)
+        rospy.Timer(rospy.Duration(5.0), self.publish_bbox_vertices)
+
+        # Subscribe to the drone ground truth to show their mesh
+        self.odomSub        = {}
+        self.lastOdomTime   = {}
+        self.droneMarker    = {}
+        self.droneMarkerPub = {}
+
+        # Create marker and publisher for the drone meshes
+        id_ = 0
+        for drone in fleet:
+            
+            id_ += 1
+            marker = Marker()
+            marker.id = id_
+            
+            if fleet[drone] == 'gcs':
+                marker.mesh_resource = 'package://rotors_description/meshes/gcs.stl'
+            elif fleet[drone] == 'explorer':
+                marker.mesh_resource = 'package://rotors_description/meshes/firefly_' + fleet[drone] + '.stl'
+            else:
+                marker.mesh_resource = 'package://rotors_description/meshes/firefly.stl'
+
+            marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
+            marker.type = marker.MESH_RESOURCE
+            marker.header.frame_id = "world"
+            marker.scale.x = 7.0
+            marker.scale.y = 7.0
+            marker.scale.z = 7.0
+            marker.pose.orientation.w = 1.0
+            marker.color.a = 1.0
+            marker.color.r = 0.0
+            marker.color.g = 1.0
+            marker.color.b = 1.0
+
+            self.odomSub[drone]        = rospy.Subscriber('/' + drone + '/ground_truth/odometry', OdomMsg, self.update_drone_mesh, drone, queue_size=1)
+            self.lastOdomTime[drone]   = rospy.Time.now()
+            self.droneMarker[drone]    = marker
+            self.droneMarkerPub[drone] = rospy.Publisher('/' + drone + '/drone_mesh', Marker, queue_size=1)        
+
+    def update_structure_mesh(self, event=None):
+
+        # find all model in the model path
+        files = [ file for file in os.listdir(self.model_path) if file.endswith(('.dae', '.stl', '.mesh'))]
+
+        # if len(files) == self.current_structure_count:
+        #     return
+        # self.current_structure_count = len(files)
+
+        # Marker to visualize
+        modelMarkerArray = MarkerArray()
+
+        for marker_id, file in enumerate(files):
+            marker = Marker()
+            marker.id = marker_id
+            marker.mesh_resource = 'package://caric_mission' + self.model_dir + '/' + file
+            marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
+            marker.type = marker.MESH_RESOURCE
+            marker.header.frame_id = "world"
+            marker.scale.x = 1.0
+            marker.scale.y = 1.0
+            marker.scale.z = 1.0
+            marker.pose.orientation.w = 1.0
+            marker.color.a = 1.0
+            marker.color.r = 0.0
+            marker.color.g = 1.0
+            marker.color.b = 1.0            
+            modelMarkerArray.markers.append(marker)
+
+        self.modelMarkerPub.publish(modelMarkerArray)
+
+    def update_bbox_mesh(self, event=None):
+
+        files = [ file for file in os.listdir(self.bbox_path) if file.endswith(('.dae', '.stl', '.mesh'))]
+
+        # if len(files) == self.current_bbox_count:
+        #     return
+        # self.current_bbox_count = len(files)
+
+        # Marker to visualize
+        bboxMarkerArray = MarkerArray()
+
+        for marker_id, file in enumerate(files):
+            # print('Loading file: %s', file)
+            marker = Marker()
+            marker.id = marker_id
+            marker.mesh_resource = 'package://caric_mission' + self.model_dir + '/bounding_boxes/' + file
+            marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
+            marker.type = marker.MESH_RESOURCE
+            marker.header.frame_id = "world"
+            marker.scale.x = 1.0
+            marker.scale.y = 1.0
+            marker.scale.z = 1.0
+            marker.pose.orientation.w = 1.0
+            marker.color.a = 0.1
+            marker.color.r = 1.0
+            marker.color.g = 0.9
+            marker.color.b = 0.0            
+            bboxMarkerArray.markers.append(marker)
+
+        self.bboxMarkerPub.publish(bboxMarkerArray)
+
+    def update_drone_mesh(self, msg, drone):
+        
+        if (msg.header.stamp - self.lastOdomTime[drone]).to_sec() < 0.1:
+            return
+        
+        # Update the time
+        self.lastOdomTime[drone] = msg.header.stamp
+
+        # Update the pose
+        self.droneMarker[drone].pose = msg.pose.pose
+
+        # Publish the new marker
+        self.droneMarkerPub[drone].publish(self.droneMarker[drone])
+
+    def get_bounding_box_vertices(self, c, s, T):
+        
+        hs = s / 2.0
+        
+        # Define the eight vertices of the rectangle
+        vertices = np.array([ [-hs[0], -hs[1], -hs[2]],
+                              [ hs[0], -hs[1], -hs[2]],
+                              [ hs[0],  hs[1], -hs[2]],
+                              [-hs[0],  hs[1], -hs[2]],
+                              [-hs[0], -hs[1],  hs[2]],
+                              [ hs[0], -hs[1],  hs[2]],
+                              [ hs[0],  hs[1],  hs[2]],
+                              [-hs[0],  hs[1],  hs[2]]])
+        
+        R = T[0:3, 0:3]
+        rotated_vertices = np.dot(vertices, R.T)
+        translated_vertices = rotated_vertices + c
+        return translated_vertices
+
+    def publish_bbox_vertices(self, event=None):
+        self.bb_cloud.header.stamp = rospy.Time.now()
+        self.bbPub.publish(self.bb_cloud)
 
 if __name__ == '__main__':
 
     rospy.init_node("mesh_visualizer")
-    rate = rospy.Rate(1)
 
-    print('Initializing object visualizer')
-    rp = rospkg.RosPack()
+    # Create the visualizer    
+    mv = MeshVisualizer()
 
-    model_path = rospy.get_param("/model_path")
-    print("model_path ", model_path)
-    model_dir = model_path.split('caric_mission')[-1]
-
-    modelMarkerArray = MarkerArray()
-    modelMarkerPub = rospy.Publisher('model_viz', MarkerArray, queue_size=1)
-
-    bbox_path = rospy.get_param("/bounding_box_path")
-    print("bounding_box_path ", bbox_path)
-    bboxMarkerArray = MarkerArray()
-    bboxMarkerPub = rospy.Publisher('bbox_viz', MarkerArray, queue_size=1)
-
-    current_model_count = 0
-    current_bbox_count = 0
-    while not rospy.is_shutdown():
-
-        # find all model in the model
-        files = [ file for file in os.listdir(model_path) if file.endswith(('.dae', '.stl', '.mesh'))]
-
-        # if the number of valid meshed in the 'meshes' folder has changed
-        if len(files) != current_model_count:
-            
-            # if some markers are removed from the 'meshes' folder, delete them in RViz
-            if len(files) < current_model_count:
-                marker = Marker()
-                marker.header.frame_id = 'world'
-                # send the DELETEALL marker to delete all marker in RViz
-                marker.action = marker.DELETEALL
-                modelMarkerArray.markers.append(marker)
-                modelMarkerPub.publish(modelMarkerArray)
-
-            current_model_count = len(files)
-            for marker_id, file in enumerate(files):
-                print('Loading file: %s', file)
-                marker = Marker()
-                marker.id = marker_id
-                marker.mesh_resource = 'package://caric_mission' + model_dir + '/' + file
-                marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
-                marker.type = marker.MESH_RESOURCE
-                marker.header.frame_id = "world"
-                marker.scale.x = 1.0
-                marker.scale.y = 1.0
-                marker.scale.z = 1.0
-                marker.pose.orientation.w = 1.0
-                marker.color.a = 1.0
-                marker.color.r = 0.0
-                marker.color.g = 1.0
-                marker.color.b = 1.0            
-                modelMarkerArray.markers.append(marker)
-        
-        modelMarkerPub.publish(modelMarkerArray)
-
-        # find all bounding box in the bounding box path
-        files = [ file for file in os.listdir(bbox_path) if file.endswith(('.dae', '.stl', '.mesh'))]
-        
-        # if the number of valid meshed in the 'meshes' folder has changed
-        if len(files) != current_bbox_count:
-            
-            # if some markers are removed from the 'meshes' folder, delete them in RViz
-            if len(files) < current_bbox_count:
-                marker = Marker()
-                marker.header.frame_id = 'world'
-                # send the DELETEALL marker to delete all marker in RViz
-                marker.action = marker.DELETEALL
-                bboxMarkerArray.markers.append(marker)
-                bboxMarkerPub.publish(bboxMarkerArray)
-
-            current_bbox_count = len(files)
-            for marker_id, file in enumerate(files):
-                print('Loading file: %s', file)
-                marker = Marker()
-                marker.id = marker_id
-                marker.mesh_resource = 'package://caric_mission' + model_dir + '/bounding_boxes/' + file
-                marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
-                marker.type = marker.MESH_RESOURCE
-                marker.header.frame_id = "world"
-                marker.scale.x = 1.0
-                marker.scale.y = 1.0
-                marker.scale.z = 1.0
-                marker.pose.orientation.w = 1.0
-                marker.color.a = 0.3
-                marker.color.r = 1.0
-                marker.color.g = 0.9
-                marker.color.b = 0.0            
-                bboxMarkerArray.markers.append(marker)
-
-        bboxMarkerPub.publish(bboxMarkerArray)
-        
-        rate.sleep()
+    # Spin
+    rospy.spin()
