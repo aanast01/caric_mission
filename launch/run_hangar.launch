@@ -23,6 +23,7 @@
     <!-- Frequency to check the line of sight raytracing -->
     <arg name="ppcom_hz"              default="50"/>
     <param name="/use_sim_time"       value="true"/>
+    <arg name="ppcom_file"            default="caric_ppcom_network_hangar.txt"/>
 
 
     <!-- Launch the Gazebo World -->
@@ -75,7 +76,7 @@
         <arg name="model"             value="$(find rotors_description)/urdf/gcs.xacro" />
         
         <arg name="ppcom_id"          value="gcs" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/$(arg ppcom_file)" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
         <arg name="interest_points"   value="$(arg interest_points)" />
 
@@ -95,7 +96,7 @@
         <arg name="model"             value="$(find rotors_description)/urdf/caric_explorer.xacro" />
 
         <arg name="ppcom_id"          value="jurong" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/$(arg ppcom_file)" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
         <arg name="start_x"           value="-11" />
@@ -113,7 +114,7 @@
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="sentosa" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/$(arg ppcom_file)" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
         <arg name="start_x"           value="-17.0" />
@@ -131,7 +132,7 @@
         <arg name="model"             value="$(find rotors_description)/urdf/caric_photographer.xacro" />
 
         <arg name="ppcom_id"          value="changi" />
-        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/caric_ppcom_network.txt" />
+        <arg name="ppcom_config"      value="$(find rotors_description)/ppcom_network/$(arg ppcom_file)" />
         <arg name="ppcom_hz"          value="$(arg ppcom_hz)" />
 
         <arg name="start_x"           value="9.0" />
