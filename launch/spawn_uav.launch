@@ -31,6 +31,7 @@
 
     <!-- Role of the UAV, for proper PID params-->
     <arg name="role"                  default="$(arg role)" />
+    <arg name="manual_control"        default="false" />
 
     <group ns="$(arg namespace)">
 
@@ -74,6 +75,21 @@
             <remap from="odometry" to="/$(arg namespace)/$(arg odom_topic)" />
 
         </node>
+
+        <group if="$(eval arg('manual_control') == true)">
+
+            <node name="key_joystick" pkg="rotors_joy_interface" type="key_joystick.py" />
+            <node name="joy_node" pkg="joy" type="joy_node" />
+            <node name="rotors_joy_control_interface" pkg="rotors_joy_interface" type="rotors_joy_control_interface" output="screen">
+                <remap from="/ground_truth/odometry"
+                       to="/$(arg namespace)/$(arg odom_topic)" />
+                <remap from="/firefly/command/trajectory"
+                       to="/$(arg namespace)/command/trajectory" />  
+                <remap from="/firefly/command/gimbal"
+                       to="/$(arg namespace)/command/gimbal" />       
+            </node>
+
+        </group>
 
     </group>
 
