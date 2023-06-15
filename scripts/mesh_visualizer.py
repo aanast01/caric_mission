@@ -110,7 +110,7 @@ class MeshVisualizer:
             marker.scale.z = 7.0
             marker.pose.orientation.w = 1.0
             marker.color.a = 1.0
-            marker.color.r = 0.0
+            marker.color.r = 1.0
             marker.color.g = 1.0
             marker.color.b = 1.0
 
