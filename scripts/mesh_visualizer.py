@@ -16,6 +16,11 @@ fleet = {'gcs'     : 'gcs',
          'changi'  : 'photographer',
          'nanyang' : 'photographer'}
 
+def circular_rotate(lst, n):
+    n = n % len(lst)  # To handle cases where n is greater than the list length
+    rotated_list = lst[-n:] + lst[:-n]
+    return rotated_list
+
 class MeshVisualizer:
 
     def __init__(self):
@@ -73,6 +78,7 @@ class MeshVisualizer:
         self.odomSub        = {}
         self.lastOdomTime   = {}
         self.droneMarker    = {}
+        self.droneSTL       = {}
         self.droneMarkerPub = {}
 
         # Create marker and publisher for the drone meshes
@@ -82,13 +88,19 @@ class MeshVisualizer:
             id_ += 1
             marker = Marker()
             marker.id = id_
+
+            stl = []
             
             if fleet[drone] == 'gcs':
-                marker.mesh_resource = 'package://rotors_description/meshes/gcs.stl'
+                stl = ['package://rotors_description/meshes/gcs.stl']
             elif fleet[drone] == 'explorer':
-                marker.mesh_resource = 'package://rotors_description/meshes/firefly_' + fleet[drone] + '.stl'
+                stl = ['package://rotors_description/meshes/firefly_explorer_0.stl',
+                       'package://rotors_description/meshes/firefly_explorer_1.stl',
+                       'package://rotors_description/meshes/firefly_explorer_2.stl']
             else:
-                marker.mesh_resource = 'package://rotors_description/meshes/firefly.stl'
+                stl = ['package://rotors_description/meshes/firefly_photographer_0.stl',
+                       'package://rotors_description/meshes/firefly_photographer_1.stl',
+                       'package://rotors_description/meshes/firefly_photographer_2.stl']
 
             marker.mesh_use_embedded_materials = True  # Need this to use textures for mesh
             marker.type = marker.MESH_RESOURCE
@@ -105,6 +117,7 @@ class MeshVisualizer:
             self.odomSub[drone]        = rospy.Subscriber('/' + drone + '/ground_truth/odometry', OdomMsg, self.update_drone_mesh, drone, queue_size=1)
             self.lastOdomTime[drone]   = rospy.Time.now()
             self.droneMarker[drone]    = marker
+            self.droneSTL[drone]       = stl
             self.droneMarkerPub[drone] = rospy.Publisher('/' + drone + '/drone_mesh', Marker, queue_size=1)        
 
     def update_structure_mesh(self, event=None):
@@ -130,7 +143,7 @@ class MeshVisualizer:
             marker.scale.y = 1.0
             marker.scale.z = 1.0
             marker.pose.orientation.w = 1.0
-            marker.color.a = 1.0
+            marker.color.a = 0.8
             marker.color.r = 0.0
             marker.color.g = 1.0
             marker.color.b = 1.0            
@@ -171,7 +184,7 @@ class MeshVisualizer:
 
     def update_drone_mesh(self, msg, drone):
         
-        if (msg.header.stamp - self.lastOdomTime[drone]).to_sec() < 0.1:
+        if (msg.header.stamp - self.lastOdomTime[drone]).to_sec() < 0.05:
             return
         
         # Update the time
@@ -179,6 +192,10 @@ class MeshVisualizer:
 
         # Update the pose
         self.droneMarker[drone].pose = msg.pose.pose
+
+        # Rotate the marker
+        self.droneSTL[drone] = circular_rotate(self.droneSTL[drone], 1)
+        self.droneMarker[drone].mesh_resource = self.droneSTL[drone][0]
 
         # Publish the new marker
         self.droneMarkerPub[drone].publish(self.droneMarker[drone])
