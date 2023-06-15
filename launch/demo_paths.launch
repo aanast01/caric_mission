@@ -2,9 +2,6 @@
 
     <arg name="manual_control" default="false" />
 
-    <!-- Launch the simulator -->
-    <include file="$(find caric_mission)/launch/run_mbs.launch"/>
-
     <group ns="jurong">
 
         <arg name="namespace" default="jurong" />
@@ -204,5 +201,11 @@
         </group>
 
     </group>
+
+    <!-- Launch the simulator -->
+    <include file="$(find caric_mission)/launch/run_mbs.launch"/>
+
+    <!-- For visualization -->
+    <node name="odom2tf" pkg="caric_mission" type="odom2tf.py" output="screen"/>
 
 </launch>

@@ -75,3 +75,5 @@ catkin_install_python(PROGRAMS scripts/ppcom_raffles_talker.py DESTINATION ${CAT
 catkin_install_python(PROGRAMS scripts/ppcom_sentosa_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_install_python(PROGRAMS scripts/ppcom_changi_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_install_python(PROGRAMS scripts/ppcom_nanyang_talker.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+catkin_install_python(PROGRAMS scripts/odom2tf.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
