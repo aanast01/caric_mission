@@ -51,7 +51,7 @@
 // #include <pcl/search/impl/kdtree.hpp>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 
-#include "tcc/Stop.h"
+#include "unicon/Stop.h"
 #include "utility.h"
 
 #include "boost/filesystem.hpp"
@@ -201,7 +201,7 @@ void ContactCallback(ConstContactsPtr &_msg)
                     // printf("wr %d: %6.3f. %6.3f. %6.3f. %s\n", k, force.x(), force.y(), force.z(), _msg->contact(i).world().c_str());
                     
                     // Command the drones to fall
-                    tcc::Stop stop;
+                    unicon::Stop stop;
                     stop.request.message = KRED "Collision happens over " + nodeName[node_idx] + ". Control Stopped!" RESET;
                     ros::service::call("/" + nodeName[node_idx] + "/stop", stop);
                 }
@@ -516,7 +516,7 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
                         node_idx, nodeName[node_idx].c_str(), nodeRole[node_idx].c_str());
             
             // Command the drones to fall
-            tcc::Stop stop;
+            unicon::Stop stop;
             stop.request.message = KRED "Collision happens over " + nodeName[node_idx] + ". Control Stopped!" RESET;
             ros::service::call("/" + nodeName[node_idx] + "/stop", stop);
 

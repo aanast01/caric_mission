@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
   rotors_comm
-  tcc
+  unicon
   message_generation
 )
 

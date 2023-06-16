@@ -4,7 +4,7 @@ catkin build;
 # Launch the drones
 
 (
-    sleep 30;
+    sleep 5;
     wait;
     
     (

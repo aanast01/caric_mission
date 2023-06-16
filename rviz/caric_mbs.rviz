@@ -408,8 +408,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 19.394399642944336
-            Min Value: -0.186065673828125
+            Max Value: 54.735111236572266
+            Min Value: -0.04216301441192627
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -556,8 +556,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 22.958803176879883
-            Min Value: -0.06924234330654144
+            Max Value: 54.735111236572266
+            Min Value: -0.04216301441192627
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -584,8 +584,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 19.394399642944336
-            Min Value: -0.186065673828125
+            Max Value: 41.81077194213867
+            Min Value: -0.021404623985290527
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -612,8 +612,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 11.778875350952148
-            Min Value: -0.14948081970214844
+            Max Value: 55.64229965209961
+            Min Value: -0.03638434410095215
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -825,7 +825,7 @@ Visualization Manager:
       Marker Topic: /score_at_point_txt
       Name: ScoreAtPoint
       Namespaces:
-        {}
+        gcs: true
       Queue Size: 1
       Value: true
     - Class: rviz/Marker
@@ -916,7 +916,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 42.387290954589844
+      Distance: 58.07105255126953
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -924,17 +924,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 7.727451324462891
-        Y: -2.3730196952819824
-        Z: -6.697397338939481e-07
+        X: 9.65427017211914
+        Y: -7.315525531768799
+        Z: -2.6477491701371036e-06
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.37539857625961304
+      Pitch: 0.07539907097816467
       Target Frame: jurong/base_link
-      Yaw: 4.5403971672058105
+      Yaw: 2.9654150009155273
     Saved: ~
 Window Geometry:
   Displays:

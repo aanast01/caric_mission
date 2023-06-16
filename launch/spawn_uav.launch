@@ -49,14 +49,14 @@
         </include>
 
         <!-- Launching the trajectory controller -->
-        <node respawn="false" pkg="tcc" type="tcc" name="tcc" output="screen"
+        <node respawn="false" pkg="unicon" type="unicon" name="unicon" output="screen"
               launch-prefix="bash -c 'sleep $(arg delay_time); $0 $@' ">
             
             <param name="frame_id"              type="string"  value="world" />
             <param name="sim_type"              type="string"  value="$(arg sim_type)" />
             <param name="mpc_sim"               type="bool"    value="false" />
             <param name="enable_thrust_control" type="bool"    value="$(arg enable_thrust_control)" />
-            <rosparam file="$(find tcc)/param/param_$(arg role).yaml" />
+            <rosparam file="$(find unicon)/param/param_$(arg role).yaml" />
 
             <remap from="vins_estimator/odometry"
                    to="/$(arg namespace)/$(arg odom_topic)" />
