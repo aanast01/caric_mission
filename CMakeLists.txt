@@ -44,7 +44,7 @@ generate_messages(
 
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES caric_mission
+#  LIBRARIES caric_mission
  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
  DEPENDS system_lib rospy
 )
