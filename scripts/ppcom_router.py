@@ -9,6 +9,8 @@ from rotors_comm.msg import PPComTopology
 from importlib import import_module
 from caric_mission.srv import CreatePPComTopic
 
+import threading
+
 import random
 import string
 
@@ -82,6 +84,10 @@ class Dialogue:
         self.permitted_edges.add(edge)
 
 
+# Mutex for the dialogue dictionary
+dialogue_mutex = threading.Lock()
+
+
 # Update the topology
 def TopologyCallback(msg):
 
@@ -106,7 +112,14 @@ def DataCallback(msg):
     
     topic = conn_header['topic']
     callerid = conn_header['callerid']
-    source_node = topic_to_dialogue[topic].callerids_to_source[callerid]
+
+    try:
+        source_node = topic_to_dialogue[topic].callerids_to_source[callerid]
+    except:
+        print("Missing key: ", callerid)
+        print(topic_to_dialogue.keys())
+        print(topic_to_dialogue[topic].callerids_to_source.keys())
+        return
 
     # print(f"Msg from callerid {conn_header['callerid']}. Topic: {conn_header['topic']}. Size: {len(msg._buff)}")
 
@@ -167,15 +180,18 @@ def CreatePPComTopicCallback(req):
 
         msg_class = getattr(import_module(package + '.msg'), message)
 
+        # Request access to the dialogue dict
+        dialogue_mutex.acquire()
+
         # If topic has not been created, create it
         if topic not in topic_to_dialogue.keys():
             topic_to_dialogue[topic] = Dialogue(topic, rospy.Subscriber(topic, rospy.msg.AnyMsg, DataCallback), source, callerid)
         else:
             topic_to_dialogue[topic].addSource(source, callerid)
 
-        # # If source under this topic has not been created, create it
-        # if source not in topic_to_dialogue[topic].keys():
-        #     topic_to_dialogue[topic][source] = {}
+        # If source under this topic has not been created, create it
+        if source not in topic_to_dialogue[topic].keys():
+            topic_to_dialogue[topic][source] = {}
 
         # If 'all' is set in targets just set targets to all existing node
         if 'all' in targets[0]:
@@ -197,6 +213,8 @@ def CreatePPComTopicCallback(req):
 
             # Create a subscriber and publisher pair
             topic_to_dialogue[topic].target_to_pub[target] = rospy.Publisher(topic + '/' + target, msg_class, queue_size=1)
+
+        dialogue_mutex.release()
 
         # Report success
         return 'success lah!'
