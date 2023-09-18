@@ -189,9 +189,9 @@ def CreatePPComTopicCallback(req):
         else:
             topic_to_dialogue[topic].addSource(source, callerid)
 
-        # If source under this topic has not been created, create it
-        if source not in topic_to_dialogue[topic].keys():
-            topic_to_dialogue[topic][source] = {}
+        # # If source under this topic has not been created, create it
+        # if source not in topic_to_dialogue[topic].keys():
+        #     topic_to_dialogue[topic][source] = {}
 
         # If 'all' is set in targets just set targets to all existing node
         if 'all' in targets[0]:
