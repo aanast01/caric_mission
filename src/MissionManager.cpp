@@ -38,6 +38,7 @@
 #include "ros/ros.h"
 #include "visualization_msgs/Marker.h"
 #include "std_msgs/ColorRGBA.h"
+#include "std_msgs/Duration.h"
 
 // Message synchronization
 #include <message_filters/subscriber.h>
@@ -125,6 +126,9 @@ deque<deque<CloudXYZIPtr>> kfCloud;
 deque<ros::Publisher> kfPosePub;
 deque<ros::Publisher> slfKfCloudPub;
 deque<ros::Publisher> cloudInWPub;
+
+// Mission information
+deque<ros::Publisher> missionDurRemained;
 
 // Cooperative SLAM
 deque<std::mutex>     nbr_kf_pub_mtx;
@@ -364,6 +368,10 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
             nbrKfCloudPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/nbr_kf_cloud", 1));
             nbr_odom_pub_mtx.emplace_back();
             nbrOdomPub.push_back(nh_ptr->advertise<sensor_msgs::PointCloud2>("/" + nodeName[i] + "/nbr_odom_cloud", 1));
+
+            // Set the mission time to all the units (in practice this param can be broadcast over the network at the beginning)
+            nh_ptr->setParam("/" + nodeName[i] + "/mission_duration", mission_duration);
+            missionDurRemained.push_back(nh_ptr->advertise<std_msgs::Duration>("/" + nodeName[i] + "/mission_duration_remained", 1));
         }
     }
 
@@ -505,6 +513,16 @@ void PPComCallback(const rotors_comm::PPComTopology::ConstPtr &msg)
 
     vizAid.rosPub.publish(vizAid.marker);
 
+    // Publish mission time for each namespace
+    if (mission_started)
+    {
+        for(int node_idx = 0; node_idx < Nnodes; node_idx++)
+        {
+            std_msgs::Duration msg;
+            msg.data = ros::Duration(mission_duration) - (ros::Time::now() - mission_start_time);
+            missionDurRemained[node_idx].publish(msg);
+        }
+    }
 
     // Shutdown everything when mission time elapses
     if (mission_started && ((ros::Time::now() - mission_start_time).toSec() > mission_duration))
