@@ -137,6 +137,9 @@ def DataCallback(msg):
         i = ppcomTopo.node_id.index(source_node)
         j = ppcomTopo.node_id.index(target_node)
 
+        if i >= len(ppcomTopo.node_alive) or j >= len(ppcomTopo.node_alive):
+            continue
+
         # print(f"Checking index {i}, {j}. Nodes {len(ppcomTopo.node_alive)}. Buf: {len(ppcomTopo.topo.node_alive)}")
         # print(f"Checking node_alive[i] {ppcomTopo.node_alive[i]},\nnode_alive[j] {ppcomTopo.node_alive[j]}.")
 
