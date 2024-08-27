@@ -19,6 +19,8 @@ sudo apt-get install python3-wstool python3-catkin-tools python3-empy \
                      ros-$ROS_DISTRO-control-toolbox \
                      ros-$ROS_DISTRO-octomap-msgs \
                      ros-$ROS_DISTRO-octomap-ros \
+                     ros-$ROS_DISTRO-octomap-server \
+                     ros-$ROS_DISTRO-octomap-rviz-plugins \
                      ros-$ROS_DISTRO-mavros \
                      ros-$ROS_DISTRO-mavros-msgs \
                      ros-$ROS_DISTRO-rviz-visual-tools \
